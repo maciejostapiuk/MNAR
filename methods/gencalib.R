@@ -1,9 +1,9 @@
 library(sampling)
 
-gencal <-  function(totals, nonresponse, instrumental_variables = NULL, target_variables, initial_weights) {
-  if (sum(dim(nonresponse) == dim(instrumental_variables)) == ncol(nonresponse) -1) {
-    weights <- gencalib(nonresponse,
-                        instrumental_variables,
+gencal <-  function(totals, calib_var, instr_var = NULL, target_var, initial_weights) {
+  if (sum(dim(calib_var) == dim(instr_var)) == ncol(calib_var) -1) {
+    weights <- gencalib(calib_var,
+                        instr_var,
                         initial_weights,
                         total = totals,
                         method = "raking")

@@ -26,7 +26,7 @@ for (r in 1:n_reps) {
   zs = model.matrix(~x1 + y, sample)
   d = rep(1, NROW(sample))
   ## generalized calibration
-  g_generl <-mnar(totals = totals,nonresponse = xs, instrumental_variables=zs, target_variables=y,initial_weights=d, method = "gencalib")
+  g_generl <-mnar(totals = totals,calib_var = xs, instr_var=zs, target_var=y,initial_weights=d, method = "gencalib")
   
   ## naive
   results[r,1] <- mean(sample$y)
