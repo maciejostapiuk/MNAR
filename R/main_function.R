@@ -1,7 +1,8 @@
 library(sampling)
+library(devtools)
 library(rstudioapi)
-setwd(dirname(getActiveDocumentContext()$path))
-source("../methods/gencalib.R")
+
+source("R/gencalib.R")
 
 
 mnar <- function(totals, calib_var, instr_var = NULL, target_var, initial_weights, method) {

@@ -1,4 +1,6 @@
 library(sampling)
+library(devtools)
+library(rstudioapi)
 
 gencal <-  function(totals, calib_var, instr_var = NULL, target_var, initial_weights) {
   if (sum(dim(calib_var) == dim(instr_var)) == ncol(calib_var) -1) {
@@ -9,4 +11,3 @@ gencal <-  function(totals, calib_var, instr_var = NULL, target_var, initial_wei
                         method = "raking")
     return(weights)}
                         }
-  

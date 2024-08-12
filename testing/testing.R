@@ -1,8 +1,8 @@
 library(sampling)
+library(devtools)
 library(rstudioapi)
-setwd(dirname(getActiveDocumentContext()$path))
-
-source("../main_func/main_function.R")
+check()
+load_all()
 
 
 
@@ -27,7 +27,7 @@ for (r in 1:n_reps) {
   d = rep(1, NROW(sample))
   ## generalized calibration
   g_generl <-mnar(totals = totals,calib_var = xs, instr_var=zs, target_var=y,initial_weights=d, method = "gencalib")
-  
+
   ## naive
   results[r,1] <- mean(sample$y)
   results[r,2] <- weighted.mean(sample$y, g_generl)
@@ -40,3 +40,25 @@ y_true <- pop_data$y
 apply(results, 2, FUN = function(x) c(bias = mean(x) - mean(y_true),
                                       sd = sd(x),
                                       rmse = sqrt( (mean(x) - mean(y_true))^2 + var(x))))
+
+
+
+# Pobierz wszystkie ścieżki z .libPaths()
+library_paths <- .libPaths()
+
+# Iteracja po każdej ścieżce
+for (path in library_paths) {
+  cat("Sprawdzanie ścieżki:", path, "\n")
+
+  # Możesz sprawdzić, jakie pakiety są zainstalowane w danej ścieżce
+  installed_packages <- list.files(path)
+
+  # Wyświetl zainstalowane pakiety w tej ścieżce
+  cat("Pakiety zainstalowane w tej ścieżce:\n")
+  print(installed_packages)
+  cat("\n\n")
+}
+
+
+
+
