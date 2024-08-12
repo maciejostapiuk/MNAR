@@ -2,6 +2,7 @@ set.seed(123)
 n <- 10000
 x1 <- rlnorm(n, 0, 1)
 x2 <- rexp(n, 1)
+x3 <-  rpois(n,2)
 y <- 1 + x1 + x2 + rnorm(n)
 pr <- plogis(1 + 0.5*x1 - 0.5*y)
 pop_data <- data.frame(x1, x2, y, pr)
@@ -17,12 +18,13 @@ for (r in 1:n_reps) {
   xs = model.matrix(~x1 + x2, sample)
   zs = model.matrix(~x1 + y, sample)
   d = rep(1, NROW(sample))
-  ## generalized calibration
-  g_generl <-mnar(totals = totals,calib_var = xs, instr_var=zs, target_var=y,initial_weights=d, method = "gencalib")
 
-  ## naive
-  results[r,1] <- mean(sample$y)
-  results[r,2] <- weighted.mean(sample$y, g_generl)
+  # Generalized calibration
+  g_generl <- mnar(totals = totals, nonresponse = xs, calib_var = zs, target_var = y, initial_weights = d, method = "gencalib")
+
+  # Naive
+  results[r, 1] <- mean(sample$y)
+  results[r, 2] <- weighted.mean(sample$y, g_generl)
 }
 
 boxplot(results - mean(pop_data$y))
