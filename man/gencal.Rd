@@ -4,16 +4,14 @@
 \alias{gencal}
 \title{An internal function for calibration of weights to adjust for nonignorable nonresponse}
 \usage{
-gencal(totals, calib_var, instr_var = NULL, target_var, initial_weights)
+gencal(totals, nonresponse, calib_var, initial_weights)
 }
 \arguments{
 \item{totals}{A vector of population totals}
 
-\item{calib_var}{A matrix of calibration variables}
+\item{nonresponse}{A matrix of calibration variables}
 
-\item{instr_var}{A matrix of instrumental variables}
-
-\item{target_var}{A vector of target variables}
+\item{calib_var}{A matrix of instrumental variables}
 
 \item{initial_weights}{A vector of initial weights, derived from sampling design}
 }
@@ -21,5 +19,5 @@ gencal(totals, calib_var, instr_var = NULL, target_var, initial_weights)
 An internal function for calibration of weights to adjust for nonignorable nonresponse
 }
 \author{
-Maciej Ostapiuk based on Kott and Chang (2010) and Kott and Liao (2017)
+Maciej Ostapiuk and Maciej Beręsewicz based on Kott and Chang (2010) and Kott and Liao (2017)
 }
