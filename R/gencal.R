@@ -2,61 +2,45 @@
 #'
 #' @author Maciej Ostapiuk and Maciej Beręsewicz based on Kott and Chang (2010) and Kott and Liao (2017)
 #' @param totals A vector of population totals
-#' @param calib_var A matrix of calibration variables
-#' @param instr_var A matrix of instrumental variables
-#' @param target_var A vector of target variables
+#' @param nonresponse A matrix of calibration variables
+#' @param calib_var A matrix of instrumental variables
 #' @param initial_weights A vector of initial weights, derived from sampling design
-#'
 #' @importFrom sampling gencalib
-gencal <- function(totals, nonresponse, calib_var = NULL, target_var = NULL, initial_weights) {
+#' @importFrom MASS ginv
+gencal <- function(totals, nonresponse, calib_var, initial_weights) {
   if (all(dim(nonresponse) == dim(calib_var))) {
     g <- sampling::gencalib(Xs = nonresponse,
-                                  Zs = calib_var,
-                                  d = initial_weights,
-                                  total = totals,
-                                  method = "raking")
+                            Zs = calib_var,
+                            d = initial_weights,
+                            total = totals,
+                            method = "raking")
     return(g)
-  } else if (all(dim(nonresponse) < dim(calib_var))) {
-    max_iter = 500
-    EPS = .Machine$double.eps
-    EPS1 = 1e-06
+  } else if (all(dim(nonresponse) <= dim(calib_var))) {
+    d <- initial_weights
+    q <- rep(1, length(initial_weights))
+    EPS <- .Machine$double.eps
+    XtWX <- t(nonresponse * d * q) %*% calib_var
 
-    lambda = as.matrix(rep(0, ncol(Xs)))
-    w1 = as.vector(d * exp(Zs %*% lambda * q))
-    T = t(Xs)
+    ginv_matrix <- MASS::ginv(XtWX, tol = EPS)
 
-    Bz <- ginv(t(Xs * d * q) %*% Zs, tol = EPS) %*% t(Zs)
 
-    for (l in 1:max_iter) {
-      phi = t(Xs) %*% w1 - total
-      phiprim = T %*% Zs %*% Bz
 
-      lambda = lambda - ginv(phiprim, tol = EPS) %*% phi
-      w1 = as.vector(d * exp(Zs %*% lambda * q))
+    ztilde_k <- calib_var %*% ginv_matrix
 
-      if (any(is.na(w1)) | any(is.infinite(w1)) | any(is.nan(w1))) {
-        warning("No convergence")
-        g = NULL
-        der = g
-        l = max_iter
-        break
-      }
 
-      tr = crossprod(Xs, w1)
-      expression = max(abs(tr - total) / total)
-      if (any(total == 0)) expression = max(abs(tr - total))
-
-      if (expression < EPS1) break
-    }
-
-    if (l == max_iter) {
-      warning("No convergence")
-      g = NULL
-      der = g
-    } else {
-      g = w1 / d
-      der = g
-    }
+    g <- sampling::gencalib(Xs = nonresponse,
+                            Zs = ztilde_k,
+                            d = initial_weights,
+                            total = totals,
+                            method = "raking")
+    return(g)
+  } else {
+    stop("Dimensions of nonresponse and calib_var are not compatible.")
   }
 }
+
+
+
+
+
 
