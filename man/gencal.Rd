@@ -2,21 +2,29 @@
 % Please edit documentation in R/gencal.R
 \name{gencal}
 \alias{gencal}
-\title{An internal function for calibration of weights to adjust for nonignorable nonresponse}
+\title{Generalized calibration function based on sampling::gencalib}
 \usage{
-gencal(totals, nonresponse, calib_var, initial_weights)
+gencal(Xs, Zs, d, totals, method = "raking", eps, maxit, tol)
 }
 \arguments{
-\item{totals}{A vector of population totals}
+\item{Xs}{A vector of population totals}
 
-\item{nonresponse}{A matrix of calibration variables}
+\item{Zs}{A matrix of calibration variables}
 
-\item{calib_var}{A matrix of instrumental variables}
+\item{d}{A matrix of instrumental variables}
 
-\item{initial_weights}{A vector of initial weights, derived from sampling design}
+\item{totals}{A vector of initial weights, derived from sampling design}
+
+\item{method}{TBA}
+
+\item{eps}{TBA}
+
+\item{maxit}{TBA}
+
+\item{tol}{TBA}
 }
 \description{
-An internal function for calibration of weights to adjust for nonignorable nonresponse
+Importing
 }
 \author{
 Maciej Ostapiuk and Maciej Beręsewicz based on Kott and Chang (2010) and Kott and Liao (2017)

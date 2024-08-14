@@ -1,7 +1,21 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 <!-- badges: start -->
+
 <!-- badges: end -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
 
 # Overview
 
@@ -11,14 +25,14 @@ An R package for Not Missing at Random
 
 ## Funding
 
-Work on this package is supported by the the National Science Centre,
-OPUS 20 grant no. 2020/39/B/HS4/00941.
+Work on this package is supported by the the National Science Centre, OPUS 20 grant no. 2020/39/B/HS4/00941.
 
 ## Installation
 
+
 You can install the development version of `MNAR` from GitHub with:
 
-``` r
+```{r, eval=FALSE}
 # install.packages("remotes")
 remotes::install_github("maciejostapiuk/MNAR")
 ```
