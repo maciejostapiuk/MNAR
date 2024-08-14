@@ -1,2 +1,11 @@
-^mnar\.Rproj$
+^.*\.Rproj$
 ^\.Rproj\.user$
+testing
+^README\.Rmd$
+^LICENSE\.md$
+^\.github$
+^codecov\.yml$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+check

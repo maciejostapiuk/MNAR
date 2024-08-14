@@ -1,42 +1,45 @@
-#' @title An internal function for calibration of weights to adjust for nonignorable nonresponse
-#'
-#' @author Maciej Ostapiuk and Maciej Beręsewicz based on Kott and Chang (2010) and Kott and Liao (2017)
-#' @param totals A vector of population totals
-#' @param nonresponse A matrix of calibration variables
-#' @param calib_var A matrix of instrumental variables
-#' @param initial_weights A vector of initial weights, derived from sampling design
+#' Importing
 #' @importFrom sampling gencalib
 #' @importFrom MASS ginv
-gencal <- function(totals, nonresponse, calib_var, initial_weights) {
-  if (all(dim(nonresponse) == dim(calib_var))) {
-    g <- sampling::gencalib(Xs = nonresponse,
-                            Zs = calib_var,
-                            d = initial_weights,
+#'
+#' @title Generalized calibration function based on sampling::gencalib
+#'
+#' @author Maciej Ostapiuk and Maciej Beręsewicz based on Kott and Chang (2010) and Kott and Liao (2017)
+#' @param Xs A vector of population totals
+#' @param Zs A matrix of calibration variables
+#' @param d A matrix of instrumental variables
+#' @param totals A vector of initial weights, derived from sampling design
+#' @param method TBA
+#' @param eps TBA
+#' @param maxit TBA
+#' @param tol TBA
+#'
+#'
+#' @export
+gencal <- function(Xs, Zs, d, totals, method="raking", eps, maxit, tol) {
+  if (ncol(Zs) == ncol(Xs)) {
+    g <- sampling::gencalib(Xs = Xs,
+                            Zs = Zs,
+                            d = d,
                             total = totals,
-                            method = "raking")
-    return(g)
-  } else if (all(dim(nonresponse) <= dim(calib_var))) {
-    d <- initial_weights
-    q <- rep(1, length(initial_weights))
-    EPS <- .Machine$double.eps
-    XtWX <- t(nonresponse * d * q) %*% calib_var
+                            method = method,
+                            max_iter = maxit)
 
-    ginv_matrix <- MASS::ginv(XtWX, tol = EPS)
+  } else if (ncol(Zs) < ncol(Xs)) {
 
+    q <- rep(1, NROW(d))
+    ZtWX <- t(Zs * d * q) %*% Xs
+    g_inv <- MASS::ginv(ZtWX, tol = eps)
+    z_tilde <- Xs %*% g_inv
 
-
-    ztilde_k <- calib_var %*% ginv_matrix
-
-
-    g <- sampling::gencalib(Xs = nonresponse,
-                            Zs = ztilde_k,
-                            d = initial_weights,
+    g <- sampling::gencalib(Xs = Xs,
+                            Zs = z_tilde,
+                            d = d,
                             total = totals,
-                            method = "raking")
-    return(g)
-  } else {
-    stop("Dimensions of nonresponse and calib_var are not compatible.")
+                            method = method,
+                            max_iter = maxit)
   }
+  return(g)
 }
 
 
