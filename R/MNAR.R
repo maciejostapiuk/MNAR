@@ -72,9 +72,8 @@ mnar <- function(response,
                  ...) {
 
   ## to be considered
-  Xs <- stats::model.matrix(calibration, data = data)
-  Zs <- stats::model.matrix(response, data = data)
-
+  Xs <- stats::model.matrix(response, data = data)
+  Zs <- stats::model.matrix(calibration, data = data)
   if (method == "gencalib") {
     weights <- gencal(Xs=Xs, Zs=Zs, d=dweights, totals=pop_totals,
                       method="raking",
@@ -83,5 +82,7 @@ mnar <- function(response,
   ## return at the end
   return(weights)
 }
+
+
 
 
