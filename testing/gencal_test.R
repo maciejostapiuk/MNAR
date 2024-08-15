@@ -6,17 +6,23 @@ x3 <-  rpois(n,2)
 y <- 1 + x1 + x2 + rnorm(n)
 pr <- plogis(1 + 0.5*x1 - 0.5*y)
 pop_data <- data.frame(x1, x2, y, pr)
-totals <- c(N = n, colSums(pop_data[, c("x1", "y")]))
+totals <- c(N = n, colSums(pop_data[, c("x1", "x2")]))
+z_totals <-  c(N = n, colSums(pop_data[, c("x1", "y")]))
 
+
+n_reps <- 100
+results <- matrix(0, n_reps, 2)
 for (r in 1:n_reps) {
   flag <- rbinom(n, 1, pop_data$pr)
   sample <- pop_data[flag == 1, ]
   sample$d <- n/nrow(sample)
   # Generalized calibration
-  g <- mnar(response = ~ x1 + y,
+  g <- mnar(response = ~ x1 +y,
             calibration =  ~ x1 + x2,
             data = sample, dweights = sample$d,
+            z_totals = z_totals,
             pop_totals = totals,
+            maxit = 200,
             method = "gencalib")
 
   # Naive
@@ -38,11 +44,12 @@ for (r in 1:n_reps) {
   sample <- pop_data[flag == 1, ]
   sample$d <- n/nrow(sample)
   # Generalized calibration
-  g1 <- mnar(response = ~ x1 + y,
-             calibration =  ~ x1 + x2 +y,
+  g1 <- mnar(response = ~ y,
+             calibration =  ~ x1 + x2,
              data = sample, dweights = sample$d,
              pop_totals = totals,
-             method = "gencalib")
+             method = "gencalib",
+             maxit = 500)
 
   # Naive
   results[r, 1] <- mean(sample$y)
