@@ -25,15 +25,14 @@ gencal <- function(Xs, Zs, d, totals, method="raking", eps, maxit, tol) {
                             method = method,
                             max_iter = maxit)
 
-  } else if (ncol(Zs) > ncol(Xs)) {
-    q <- rep(1, NROW(d))
-    XtWX <- t(Xs * d * q) %*% Zs
-    g_inv <- MASS::ginv(XtWX, tol = eps)
-    z_tilde <- Zs %*% g_inv
-    g <- sampling::gencalib(Xs = Xs,
-                            Zs = z_tilde,
+  } else if (ncol(Zs) < ncol(Xs)) {
+    A_0_t <- MASS::ginv(t(Xs) %*% Xs) %*% (t(Xs) %*% Zs)
+    x_tilde <- Xs %*% A_0_t
+    new_totals <-  colSums(x_tilde * d)
+    g <- sampling::gencalib(Xs = x_tilde,
+                            Zs = Zs,
                             d = d,
-                            total = totals,
+                            total = new_totals,
                             method = method,
                             max_iter = maxit)
   }
