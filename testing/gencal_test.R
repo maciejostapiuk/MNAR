@@ -7,8 +7,6 @@ y <- 1 + x1 + x2 + rnorm(n)
 pr <- plogis(1 + 0.5*x1 - 0.5*y)
 pop_data <- data.frame(x1, x2, y, pr)
 totals <- c(N = n, colSums(pop_data[, c("x1", "x2")]))
-z_totals <-  c(N = n, colSums(pop_data[, c("x1", "y")]))
-
 
 n_reps <- 100
 results <- matrix(0, n_reps, 2)
@@ -20,7 +18,6 @@ for (r in 1:n_reps) {
   g <- mnar(response = ~ x1 +y,
             calibration =  ~ x1 + x2,
             data = sample, dweights = sample$d,
-            z_totals = z_totals,
             pop_totals = totals,
             maxit = 200,
             method = "gencalib")
