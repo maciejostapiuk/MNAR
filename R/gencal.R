@@ -16,7 +16,7 @@
 #'
 #'
 #' @export
-gencal <- function(Xs, Zs, d, totals, method="raking", eps, maxit, tol) {
+gencal <- function(Xs, Zs, d, totals, Zs_totals, method="raking", eps, maxit, tol) {
   if (ncol(Zs) == ncol(Xs)) {
     g <- sampling::gencalib(Xs = Xs,
                             Zs = Zs,
@@ -26,13 +26,21 @@ gencal <- function(Xs, Zs, d, totals, method="raking", eps, maxit, tol) {
                             max_iter = maxit)
 
   } else if (ncol(Zs) < ncol(Xs)) {
+    ## reduction of Xs's dimension
     A_0_t <- MASS::ginv(t(Xs) %*% Xs) %*% (t(Xs) %*% Zs)
     x_tilde <- Xs %*% A_0_t
-    new_totals <-  colSums(x_tilde * d)
+
+    ## analogous for totals
+    totals <- matrix(totals)
+    Zs_totals <- matrix(Zs_totals)
+
+    A_0_t_totals <- totals %*% t(Zs_totals) * as.numeric(1/(t(totals) %*% totals))
+    totals_tilde <- t(t(totals) %*% A_0_t_totals)
+
     g <- sampling::gencalib(Xs = x_tilde,
                             Zs = Zs,
                             d = d,
-                            total = new_totals,
+                            total = totals_tilde,
                             method = method,
                             max_iter = maxit)
   }
