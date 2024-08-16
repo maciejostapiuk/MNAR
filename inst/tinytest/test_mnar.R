@@ -6,10 +6,11 @@ x3 <-  rpois(n,2)
 y <- 1 + x1 + x2 + rnorm(n)
 pr <- plogis(1 + 0.5*x1 - 0.5*y)
 pop_data <- data.frame(x1, x2, y, pr)
-totals <- c(N = n, colSums(pop_data[, c("x1", "x2")]))
+totals <- c(N = n, colSums(pop_data[, c("x1", "x2", "y")]))
 flag <- rbinom(n, 1, pop_data$pr)
 sample <- pop_data[flag == 1, ]
 sample$d <- n/nrow(sample)
+Z_totals = c(N = n, colSums(pop_data[, c("x1", "x2")]))
 
 # check if it is working --------------------------------------------------
 
@@ -17,7 +18,8 @@ expect_silent(
   g <- mnar(response = ~ x1 + x2,
             calibration =  ~ x1 + y,
             data = sample, dweights = sample$d,
-            pop_totals = totals,
+            instr_totals = Z_totals,
+            pop_totals = totals[c(1,2,4)],
             method = "gencalib")
 )
 
@@ -25,6 +27,7 @@ expect_silent(
   g1 <- mnar(response = ~ x1+x2,
              calibration =  ~ x1 + x2+y,
              data = sample, dweights = sample$d,
+             instr_totals = Z_totals,
              pop_totals = totals,
              method = "gencalib")
 )
