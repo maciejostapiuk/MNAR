@@ -50,7 +50,6 @@ for (r in 1:n_reps) {
              calibration =  ~ x1 + x2+y,
              data = sample, dweights = sample$d,
              pop_totals = x_totals,
-             instr_totals =Zs_totals,
              method = "gencalib",
              maxit = 500)
 

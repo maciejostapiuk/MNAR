@@ -16,7 +16,7 @@
 #'
 #'
 #' @export
-gencal <- function(Xs, Zs, d, totals, Zs_totals, method="raking", eps, maxit, tol) {
+gencal <- function(Xs, Zs, d, totals, method="raking", eps, maxit, tol) {
   if (ncol(Zs) == ncol(Xs)) {
     g <- sampling::gencalib(Xs = Xs,
                             Zs = Zs,

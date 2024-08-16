@@ -10,24 +10,22 @@ totals <- c(N = n, colSums(pop_data[, c("x1", "x2", "y")]))
 flag <- rbinom(n, 1, pop_data$pr)
 sample <- pop_data[flag == 1, ]
 sample$d <- n/nrow(sample)
-Z_totals = c(N = n, colSums(pop_data[, c("x1", "x2")]))
+Z_totals = c(N = n, colSums(pop_data[, c("x1", "x2", "y")]))
 
 # check if it is working --------------------------------------------------
 
 expect_silent(
-  g <- mnar(response = ~ x1 + x2,
-            calibration =  ~ x1 + y,
+  g <- mnar(response = ~ x1 + y,
+            calibration =  ~ x1 + x2,
             data = sample, dweights = sample$d,
-            instr_totals = Z_totals,
-            pop_totals = totals[c(1,2,4)],
+            pop_totals = totals[c(1,2,3)],
             method = "gencalib")
 )
 
 expect_silent(
-  g1 <- mnar(response = ~ x1+x2,
-             calibration =  ~ x1 + x2+y,
+  g1 <- mnar(response = ~ y,
+             calibration =  ~ x1 + x2,
              data = sample, dweights = sample$d,
-             instr_totals = Z_totals,
-             pop_totals = totals,
+             pop_totals = totals[c(1,2,3)],
              method = "gencalib")
 )

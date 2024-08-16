@@ -4,7 +4,7 @@
 \alias{gencal}
 \title{Generalized calibration function based on sampling::gencalib}
 \usage{
-gencal(Xs, Zs, d, totals, method = "raking", eps, maxit, tol)
+gencal(Xs, Zs, d, totals, Zs_totals, method = "raking", eps, maxit, tol)
 }
 \arguments{
 \item{Xs}{A vector of population totals}
