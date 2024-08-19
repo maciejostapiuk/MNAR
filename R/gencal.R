@@ -31,8 +31,8 @@ gencal <- function(Xs, Zs, d, totals, method="raking", eps, maxit, tol) {
     x_tilde <- Xs %*% A_0_t
 
     ## analogous for totals
+    Zs_totals <- matrix(t(as.data.frame(totals))[, c("N",intersect(colnames(Zs), colnames(t(as.data.frame(totals))))), drop=FALSE])
     totals <- matrix(totals)
-    Zs_totals <- matrix(Zs_totals)
 
     A_0_t_totals <- totals %*% t(Zs_totals) * as.numeric(1/(t(totals) %*% totals))
     totals_tilde <- t(t(totals) %*% A_0_t_totals)
