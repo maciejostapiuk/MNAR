@@ -1,0 +1,74 @@
+--- 
+title: "Generalised Calibration to adjust for unint nonresponse"
+author: "Maciej Ostapiuk and Maciej Beręsewicz"
+output: 
+    html_vignette:
+        df_print: kable
+        toc: true
+        number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Joint calibration estimators for totals and quantiles}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+link-citations: true
+header-includes: 
+  - \usepackage{amsmath}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+\newcommand{\bX}{\boldsymbol{X}}
+\newcommand{\bx}{\boldsymbol{x}}
+\newcommand{\bY}{\boldsymbol{Y}}
+\newcommand{\by}{\boldsymbol{y}}
+\newcommand{\bh}{\boldsymbol{h}}
+\newcommand{\bg}{\boldsymbol{g}}
+\newcommand{\bH}{\boldsymbol{H}}
+\newcommand{\ba}{\boldsymbol{a}}
+\newcommand{\bp}{\boldsymbol{p}}
+\newcommand{\bA}{\boldsymbol{A}}
+\newcommand{\bw}{\boldsymbol{w}}
+\newcommand{\bd}{\boldsymbol{d}}
+\newcommand{\bZ}{\boldsymbol{Z}}
+\newcommand{\bz}{\boldsymbol{z}}
+\newcommand{\bv}{\boldsymbol{v}}
+\newcommand{\bb}{\boldsymbol{b}}
+\newcommand{\bu}{\boldsymbol{u}}
+\newcommand{\bU}{\boldsymbol{U}}
+\newcommand{\bQ}{\boldsymbol{Q}}
+\newcommand{\bG}{\boldsymbol{G}}
+\newcommand{\HT}{\text{\rm HT}}
+
+\newcommand{\bbeta}{\boldsymbol{\beta}}
+\newcommand{\balpha}{\boldsymbol{\alpha}}
+\newcommand{\btau}{\boldsymbol{\tau}}
+\newcommand{\bgamma}{\boldsymbol{\gamma}}
+\newcommand{\bGamma}{\boldsymbol{\Gamma}}
+\newcommand{\btheta}{\boldsymbol{\theta}}
+\newcommand{\blambda}{\boldsymbol{\lambda}}
+\newcommand{\bPhi}{\boldsymbol{\Phi}}
+\newcommand{\bEta}{\boldsymbol{\eta}}
+
+\newcommand{\bZero}{\boldsymbol{0}}
+\newcommand{\indicator}{\mathmybb{1}}
+
+\newcommand{\colvec}{\operatorname{colvec}}
+\newcommand{\logit}{\operatorname{logit}}
+\newcommand{\Exp}{\operatorname{Exp}}
+\newcommand{\Ber}{\operatorname{Bernoulli}}
+\newcommand{\Uni}{\operatorname{Uniform}}
+
+
+# Introduction
+Calibration weighting is a method commonly used in survey sampling to adjust original design weights for sampled elements to reproduce known population totals for all auxiliary variables. Let $d_k$ denote initial weights, obtained by specific sampling design. Reproduction, using HT estimators, leads to, in most of the cases, underestimated totals. The calibration weighting approach allows one to find new weights of inputs, $w_k$'s which take place of $d_k$'s in HT estimators, providing nearly unbiased estimators. @deville1992calibration
+
+
+
