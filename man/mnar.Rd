@@ -14,7 +14,6 @@ mnar(
   dweights,
   N,
   pop_totals,
-  instr_totals = NULL,
   method = c("gencalib", "emplik", "gmm"),
   tol = 1e-08,
   maxit = 100,

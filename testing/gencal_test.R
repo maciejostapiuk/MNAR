@@ -40,18 +40,16 @@ apply(results, 2, FUN = function(x) c(bias = mean(x) - mean(y_true),
 
 
 x_totals <- c(N = n, colSums(pop_data[, c("x1", "x2", "y")]))
-Zs_totals <- c(N = n, colSums(pop_data[, c("x1", "y")]))
 for (r in 1:n_reps) {
   flag <- rbinom(n, 1, pop_data$pr)
   sample <- pop_data[flag == 1, ]
   sample$d <- n/nrow(sample)
   # Generalized calibration
-  g1 <- mnar(response = ~ x1+ y,
-             calibration =  ~ x1 + x2+y,
+  g1 <- mnar(response = ~ y,
+             calibration =  ~ x1 + y,
              data = sample, dweights = sample$d,
-             pop_totals = x_totals,
-             method = "gencalib",
-             maxit = 500)
+             pop_totals = x_totals[c(1,2,4)],
+             method = "gencalib")
 
   # Naive
   results[r, 1] <- mean(sample$y)
@@ -65,6 +63,4 @@ y_true <- pop_data$y
 apply(results, 2, FUN = function(x) c(bias = mean(x) - mean(y_true),
                                       sd = sd(x),
                                       rmse = sqrt( (mean(x) - mean(y_true))^2 + var(x))))
-
-
 
