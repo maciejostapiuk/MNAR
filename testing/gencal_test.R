@@ -46,9 +46,9 @@ for (r in 1:n_reps) {
   sample$d <- n/nrow(sample)
   # Generalized calibration
   g1 <- mnar(response = ~ y,
-             calibration =  ~ x1 + y,
+             calibration =  ~ x1 + x2,
              data = sample, dweights = sample$d,
-             pop_totals = x_totals[c(1,2,4)],
+             pop_totals = x_totals,
              method = "gencalib")
 
   # Naive
