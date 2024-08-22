@@ -41,7 +41,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gencal</span><span class="op">(</span><span class="va">Xs</span>, <span class="va">Zs</span>, <span class="va">d</span>, <span class="va">totals</span>, method <span class="op">=</span> <span class="st">"raking"</span>, <span class="va">eps</span>, <span class="va">maxit</span>, <span class="va">tol</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gencal</span><span class="op">(</span><span class="va">Xs</span>, <span class="va">Zs</span>, <span class="va">d</span>, <span class="va">pop_totals</span>, method <span class="op">=</span> <span class="st">"raking"</span>, <span class="va">eps</span>, <span class="va">maxit</span>, <span class="va">tol</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -49,42 +49,101 @@
 
 
 <dl><dt id="arg-xs">Xs<a class="anchor" aria-label="anchor" href="#arg-xs"></a></dt>
-<dd><p>A vector of population totals</p></dd>
-
-
-<dt id="arg-zs">Zs<a class="anchor" aria-label="anchor" href="#arg-zs"></a></dt>
 <dd><p>A matrix of calibration variables</p></dd>
 
 
-<dt id="arg-d">d<a class="anchor" aria-label="anchor" href="#arg-d"></a></dt>
+<dt id="arg-zs">Zs<a class="anchor" aria-label="anchor" href="#arg-zs"></a></dt>
 <dd><p>A matrix of instrumental variables</p></dd>
 
 
-<dt id="arg-totals">totals<a class="anchor" aria-label="anchor" href="#arg-totals"></a></dt>
+<dt id="arg-d">d<a class="anchor" aria-label="anchor" href="#arg-d"></a></dt>
 <dd><p>A vector of initial weights, derived from sampling design</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>TBA</p></dd>
+<dd><p>a method upon which the <code><a href="https://rdrr.io/pkg/sampling/man/gencalib.html" class="external-link">sampling::gencalib()</a></code> function will be called</p></dd>
 
 
 <dt id="arg-eps">eps<a class="anchor" aria-label="anchor" href="#arg-eps"></a></dt>
-<dd><p>TBA</p></dd>
+<dd><p>describes desired accuracy level in any convergence-related</p></dd>
 
 
 <dt id="arg-maxit">maxit<a class="anchor" aria-label="anchor" href="#arg-maxit"></a></dt>
-<dd><p>TBA</p></dd>
+<dd><p>maximum number of iterations for <code><a href="https://rdrr.io/pkg/sampling/man/gencalib.html" class="external-link">sampling::gencalib()</a></code> since it works iteratively</p></dd>
 
 
 <dt id="arg-tol">tol<a class="anchor" aria-label="anchor" href="#arg-tol"></a></dt>
-<dd><p>TBA</p></dd>
+<dd><p>desired tolerance</p></dd>
+
+
+<dt id="arg-totals">totals<a class="anchor" aria-label="anchor" href="#arg-totals"></a></dt>
+<dd><p>A vector of population totals (including totals for both Xs and Zs)</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Andridge, Rebecca R, and Roderick JA Little. 2011. “Proxy Pattern-Mixture Analysis for Survey Nonresponse.” Journal of Official Statistics 27 (2): 153.</p>
+<p>Chang, T., and P. S. Kott. 2008. “Using Calibration Weighting to Adjust for Nonresponse Under a Plausible Model.” Biometrika 95 (3): 555–71. https://doi.org/10.1093/biomet/asn022.</p>
+<p>Deville, Jean-Claude, and Carl-Erik Särndal. 1992. “Calibration Estimators in Survey Sampling.” Journal of the American Statistical Association 87 (418): 376–82.</p>
+<p>Estevao, Victor, and Carl Särndal. n.d. “A Functional Form Approach to Calibration.” Journal of Of®cial Statistics 16 (4): 379±399. https://www.proquest.com/scholarly-journals/functional-form-approach-calibration/docview/1266846662/se-2.</p>
+<p>Isaki, C. T., and W. A. Fuller. 1982. “Survey Design Under the Regression Super-Population Model.” Journal of the American Statistical Association 77 (377): 89–96.</p>
+<p>Kott, Phillip S., and Ted Chang. 2010. “Using Calibration Weighting to Adjust for Nonignorable Unit Nonresponse.” Journal of the American Statistical Association 105 (491): 1265–75. https://doi.org/10.1198/jasa.2010.tm09016.</p>
+<p>Kott, Phillip S., and Dan Liao. 2017. “Calibration Weighting for Nonresponse That Is Not Missing at Random: Allowing More Calibration Than Response-Model Variables.” Journal of Survey Statistics and Methodology 5 (2): 159–74. https://doi.org/10.1093/jssam/smx003.</p>
+    </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p>Maciej Ostapiuk and Maciej Beręsewicz based on Kott and Chang (2010) and Kott and Liao (2017)</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Generate the data to formulate response model, calibration variables and target variable</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10000</span></span></span>
+<span class="r-in"><span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html" class="external-link">rlnorm</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">rexp</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x3</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="va">n</span>,<span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html" class="external-link">plogis</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span><span class="va">x1</span> <span class="op">-</span> <span class="fl">0.5</span><span class="op">*</span><span class="va">y</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pop_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">y</span>, <span class="va">pr</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">totals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>N <span class="op">=</span> <span class="va">n</span>, <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">pop_data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x1"</span>, <span class="st">"x2"</span>, <span class="st">"y"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">flag</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">1</span>, <span class="va">pop_data</span><span class="op">$</span><span class="va">pr</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sample</span> <span class="op">&lt;-</span> <span class="va">pop_data</span><span class="op">[</span><span class="va">flag</span> <span class="op">==</span> <span class="fl">1</span>, <span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">sample</span><span class="op">$</span><span class="va">d</span> <span class="op">&lt;-</span> <span class="va">n</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sample</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## case when dim(Xs) == dim(Zs)</span></span></span>
+<span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">gencal</span><span class="op">(</span>Xs <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, data <span class="op">=</span> <span class="va">sample</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>            Zs <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">y</span>, data <span class="op">=</span> <span class="va">sample</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>            d <span class="op">=</span> <span class="va">sample</span><span class="op">$</span><span class="va">d</span>,</span></span>
+<span class="r-in"><span>            pop_totals <span class="op">=</span> <span class="va">totals</span>,</span></span>
+<span class="r-in"><span>            method <span class="op">=</span> <span class="st">"raking"</span>,</span></span>
+<span class="r-in"><span>            eps <span class="op">=</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span>,</span></span>
+<span class="r-in"><span>            maxit <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>            tol <span class="op">=</span> <span class="fl">1e-8</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span> <span class="co">#display only couple of first output values</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.1800080 2.6205677 1.0000360 1.1813942 0.6259329 0.7588780</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## case when dim(Xs) &gt; dim(Zs)</span></span></span>
+<span class="r-in"><span><span class="va">g1</span> <span class="op">&lt;-</span><span class="fu">gencal</span><span class="op">(</span>Xs <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, data <span class="op">=</span> <span class="va">sample</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>            Zs <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">y</span>, data <span class="op">=</span> <span class="va">sample</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>            d <span class="op">=</span> <span class="va">sample</span><span class="op">$</span><span class="va">d</span>,</span></span>
+<span class="r-in"><span>            pop_totals <span class="op">=</span> <span class="va">totals</span>,</span></span>
+<span class="r-in"><span>            method <span class="op">=</span> <span class="st">"raking"</span>,</span></span>
+<span class="r-in"><span>            eps <span class="op">=</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span>,</span></span>
+<span class="r-in"><span>            maxit <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>            tol <span class="op">=</span> <span class="fl">1e-8</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">g1</span><span class="op">)</span> <span class="co">#display only couple of first output values</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9848552 1.3473675 0.9738708 1.0238946 0.8732709 0.9509450</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

@@ -12,7 +12,7 @@
 #' @param method a method upon which the `sampling::gencalib()` function will be called
 #' @param eps describes desired accuracy level in any convergence-related
 #' @param maxit maximum number of iterations for `sampling::gencalib()` since it works iteratively
-#' @param tol TBA
+#' @param tol desired tolerance
 #'
 #' @references
 #' Andridge, Rebecca R, and Roderick JA Little. 2011. “Proxy Pattern-Mixture Analysis for Survey Nonresponse.” Journal of Official Statistics 27 (2): 153.
@@ -29,9 +29,7 @@
 #'
 #' Kott, Phillip S., and Dan Liao. 2017. “Calibration Weighting for Nonresponse That Is Not Missing at Random: Allowing More Calibration Than Response-Model Variables.” Journal of Survey Statistics and Methodology 5 (2): 159–74. https://doi.org/10.1093/jssam/smx003.
 #'
-#'
 #' @examples
-#'
 #' ## Generate the data to formulate response model, calibration variables and target variable
 #'
 #' set.seed(123)
@@ -57,7 +55,7 @@
 #'             maxit = 100,
 #'             tol = 1e-8)
 #'
-#' g
+#' head(g) #display only couple of first output values
 #'
 #'
 #'
@@ -71,7 +69,8 @@
 #'             maxit = 100,
 #'             tol = 1e-8)
 #'
-#' g1
+#' head(g1) #display only couple of first output values
+#'
 #'
 #'
 #' @export
@@ -106,6 +105,7 @@ gencal <- function(Xs, Zs, d, pop_totals, method="raking", eps, maxit, tol) {
                             max_iter = maxit)
   }
   return(g)
+
 }
 
 

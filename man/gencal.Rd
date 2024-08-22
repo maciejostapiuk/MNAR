@@ -19,7 +19,7 @@ gencal(Xs, Zs, d, pop_totals, method = "raking", eps, maxit, tol)
 
 \item{maxit}{maximum number of iterations for \code{sampling::gencalib()} since it works iteratively}
 
-\item{tol}{TBA}
+\item{tol}{desired tolerance}
 
 \item{totals}{A vector of population totals (including totals for both Xs and Zs)}
 }
@@ -27,7 +27,6 @@ gencal(Xs, Zs, d, pop_totals, method = "raking", eps, maxit, tol)
 Importing
 }
 \examples{
-
 ## Generate the data to formulate response model, calibration variables and target variable
 
 set.seed(123)
@@ -53,7 +52,7 @@ g <- gencal(Xs = stats::model.matrix(~ x1 + x2, data = sample),
             maxit = 100,
             tol = 1e-8)
 
-g
+head(g) #display only couple of first output values
 
 
 
@@ -67,7 +66,8 @@ g1 <-gencal(Xs = stats::model.matrix(~ x1 + x2, data = sample),
             maxit = 100,
             tol = 1e-8)
 
-g1
+head(g1) #display only couple of first output values
+
 
 
 }
