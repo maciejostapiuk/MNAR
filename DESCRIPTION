@@ -28,3 +28,4 @@ Suggests:
   rmarkdown
 VignetteBuilder: knitr
 Language: en-US
+URL: https://maciejostapiuk.github.io/MNAR/

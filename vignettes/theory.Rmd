@@ -160,8 +160,17 @@ which can be rendered as:
 \begin{equation}\label{eq: rendered calibration-weighted estimator}
     \hat{Y}_{\text{cal}} = \sum_{k \in r }{d_k y_k} + \left(\bX - \sum_{k\in r}{d_k \bx_k}\right)\bb,
 \end{equation}
-where $\displaystyle \bb = \left(\sum_{k \in r}{d_k\bz_k\bx_k^{\text{T}}}\right)^{-1} \times \sum_{k \in r}{d_k\bz_k y_k}$. Notice, that $\hat{Y}_{cal}$ is no longer unbiased by design. However it might be consistent, which is described in @isakifuller1982.\\
-How does one formulate the prediction model in this case? Let's denote two indicator random variables - $\displaystyle I_j = \indicator_{j \in U}$ $\displaystyle R_j = \indicator_{k\in r}$. @kottweightingnonignorable2010 proposed the double-protection  justiﬁcation set of equations:
+where 
+\begin{equation*}
+\bb = \left(\sum_{k \in r}{d_k\bz_k\bx_k^{\text{T}}}\right)^{-1} \times \sum_{k \in r}{d_k\bz_k y_k}.
+\end{equation*}
+Notice, that $\hat{Y}_{cal}$ is no longer unbiased by design. However it might be consistent, which is described in @isakifuller1982.
+
+\noident How does one formulate the prediction model in this case? Let's denote two indicator random variables:
+\begin{equation*}
+\displaystyle I_j = 1{j \in U} \;\;\; R_j = 1{k\in r}.
+\end{equation*}
+@kottweightingnonignorable2010 proposed the double-protection  justiﬁcation set of equations:
 \begin{equation}\label{eq: double-security-pred.framework}
 \left\{\begin{array}{lll} 
 y_k &= \bx_k^{\text{T}} \bbeta_{\bx} + \epsilon_k\\
@@ -170,19 +179,24 @@ y_k &= \bx_k^{\text{T}} \bbeta_{\bx} + \epsilon_k\\
 \end{equation}
 where $\bGamma$ is usually on full-rank (not necessarily), $\bbeta_{\bx}$ is a coefficients vector and
 \begin{equation}
-\E{\left(\epsilon_k|\bx_j,I_j,R_j\right)} = 0, \;\; \E{\left(\boldsymbol{\eta_k}|\bx_j,I_j,R_j\right)} = 0.
+E{\left(\epsilon_k|\bx_j,I_j,R_j\right)} = 0, \;\; E{\left(\boldsymbol{\eta_k}|\bx_j,I_j,R_j\right)} = 0.
 \end{equation}
 Under proposal from (\ref{eq: double-security-pred.framework}) there is a property in form of:
 \begin{equation}\label{eq: property of 2-sec prediction}
 \left(y_k - \bz_k^{\text{T}}\bbeta_{\bz}\right)|\bx_k = \left(\epsilon - \boldsymbol{\eta}_k^{\text{T}}\bGamma^{-1}\bbeta_{\bx}\right)|\bx_k,
 \end{equation}
-where $\bbeta_{\bz} = \bGamma^{-1}\bbeta_{\bx} $.
+where 
+\begin{equation*}
+\beta_{\bz} = \Gamma^{-1}\beta_{\bx}.
+\end{equation*}
+
 ## When there are more calibration than response-model variables
+
 First, lets consider $\bb_{\bz}^{*}$, a asymptotic limit of:
 \begin{equation}\label{eq: b_z}
     \bb_{\bz} =  \left(\sum_{k \in S}{d_kR_kF'_k(\bx_k^{\text{T}}\blambda)\bx_k}\bz_k^{\text{T}}\right)^{-1} \times \sum_{k \in S}{d_kR_kF'_k(\bx_k^{\text{T}}\blambda)\bx_ky_k},
 \end{equation}
-which, alongside with $\bb_{\bz}$, is said to exist apart from result of the prediction. When prediction model fails, we got $\bb_{\bz} - \bbeta_{\bz}$ as long as $\blambda$ converged to a finite $\blambda^{*}$. @chang_using_2008 considered this case and extended weighting approach by replacing calibration the reformulated equation from (\ref{eq: calib eq}):
+which, alongside with $\bb_{\bz}$, is said to exist apart from result of the prediction. When prediction model fails, we got $\bb_{\bz} - \bbeta_{\bz}$ as long as $\blambda$ converged to a finite $\blambda^{*}$. @chang_using_2008 considered this case and extended weighting approach by replacing the reformulated calibration equation from (\ref{eq: calib eq}):
 \begin{equation}\label{eq: reformulated calib. eq.}
 \boldsymbol{s} = \frac{1}{N} \left[\sum_{k \in S}{d_kR_kF_k(\bx_k^{\text{T}}\blambda)\bz_k}\bx_k- \sum_{k \in S}{d_k\bx_k}\right] = \bZero
 \end{equation}
@@ -202,7 +216,7 @@ and setting
 \end{equation}
 where $\bA^{\text{T}} =\left(\sum_{S}{R_j\bx_j\bx_j^{\text{T}}}\right)^{-1} \sum_{S}{R_j\bx_j\bz_j^{\text{T}}}$. Again, the reduction of dimensions is needed and with such obtained $\tilde{\bx}_k$ one is able to perform generalized calibration weighting technique. By far, this method is implemented as a part of `MNAR:gencal()` function.
 
-## References
+# References
 
 
 
