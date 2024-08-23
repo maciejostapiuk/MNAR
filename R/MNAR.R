@@ -126,15 +126,18 @@ mnar <- function(response,
                  pop_totals,
                  method = c("gencalib", "emplik", "gmm"),
                  tol = 1e-8,
-                 maxit = 100,
                  eps = .Machine$double.eps,
                  control = NULL,
+                 maxit = 100,
                  ...) {
 
   ## to be considered
   Xs <- stats::model.matrix(calibration, data = data)
   Zs <- stats::model.matrix(response, data = data)
   if (method == "gencalib") {
+    if("y" %in% all.vars(response)) {
+    pop_totals["y"] <-  sum(sample$d * sample$y)
+    }
     weights <- gencal(Xs=Xs, Zs=Zs, d=dweights, pop_totals=pop_totals,
                       method="raking",
                       eps=eps, maxit=maxit, tol=tol)

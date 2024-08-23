@@ -90,10 +90,8 @@ gencal <- function(Xs, Zs, d, pop_totals, method="raking", eps, maxit, tol) {
     x_tilde <- Xs %*% A_0_t
 
     ## analogous for totals
-    Zs_totals <- matrix(t(as.data.frame(pop_totals))[, c("N",intersect(colnames(Zs), colnames(t(as.data.frame(pop_totals))))), drop=FALSE])
-    totals <- matrix(t(as.data.frame(pop_totals))[, c("N",intersect(colnames(Xs), colnames(t(as.data.frame(pop_totals))))), drop=FALSE])
-
-
+    Zs_totals <- matrix(as.numeric(matrix(t(pop_totals)[, c("N",intersect(colnames(Zs), colnames(t(pop_totals)))), drop=FALSE])))
+    totals <- matrix(as.numeric(matrix(t(pop_totals)[, c("N",intersect(colnames(Xs), colnames(t(pop_totals)))), drop=FALSE])))
     A_0_t_totals <- totals %*% t(Zs_totals) * as.numeric(1/(t(totals) %*% totals))
     totals_tilde <- t(t(totals) %*% A_0_t_totals)
 

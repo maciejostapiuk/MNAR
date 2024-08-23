@@ -39,7 +39,6 @@ apply(results, 2, FUN = function(x) c(bias = mean(x) - mean(y_true),
 
 
 
-x_totals <- c(N = n, colSums(pop_data[, c("x1", "x2", "y")]))
 for (r in 1:n_reps) {
   flag <- rbinom(n, 1, pop_data$pr)
   sample <- pop_data[flag == 1, ]
@@ -48,7 +47,7 @@ for (r in 1:n_reps) {
   g1 <- mnar(response = ~ y,
              calibration =  ~ x1 + x2,
              data = sample, dweights = sample$d,
-             pop_totals = x_totals,
+             pop_totals = totals,
              method = "gencalib")
 
   # Naive
