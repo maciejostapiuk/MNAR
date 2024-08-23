@@ -7,7 +7,7 @@
 
 ## Details
 
-An R package for Not Missing at Random
+A R package for Missing Not at Random non-response and missing data (selection bias, non-ingorable non-response, informative missing data)
 
 ## Funding
 

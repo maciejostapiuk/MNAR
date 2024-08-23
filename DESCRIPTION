@@ -1,6 +1,6 @@
 Package: MNAR
 Type: Package
-Title: A package to deal with Not Missing at Random non-response
+Title: A R package for dealing with missing not at random mechanisms
 Version: 0.0.0.9000
 Authors@R: 
     c(person(given="Maciej", 
@@ -12,7 +12,7 @@ Authors@R:
              role = c("aut", "ctb"),
              email = "maciej.beresewicz@ue.poznan.pl",
              comment = c(ORCID = "0000-0002-8281-4301")))
-Description: An R package that implements several methods for NMAR problems including: generalized calibration, empirical likelihood or generalized method of moments. See ...
+Description: A R package for Missing Not at Random non-response and missing data (selection bias, non-ingorable non-response, informative missing data)
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
