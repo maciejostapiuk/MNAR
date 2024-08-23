@@ -3,7 +3,7 @@ pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   theory: theory.html
-last_built: 2024-08-22T21:33Z
+last_built: 2024-08-23T10:11Z
 urls:
   reference: https://maciejostapiuk.github.io/MNAR/reference
   article: https://maciejostapiuk.github.io/MNAR/articles
