@@ -12,7 +12,7 @@ Authors@R:
              role = c("aut", "ctb"),
              email = "maciej.beresewicz@ue.poznan.pl",
              comment = c(ORCID = "0000-0002-8281-4301")))
-Description: A R package for Missing Not at Random non-response and missing data (selection bias, non-ingorable non-response, informative missing data)
+Description: A R package for Missing Not at Random non-response and missing data correction. Package is being still developed and so far it covers methods such as: generalized calibration (based on Deville and Sarndal (1992), Kott and Liao (2017)). The package uses generalized calibration via the 'survey', 'sampling' or 'laeken' packages and it is being wrapped up by own code.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

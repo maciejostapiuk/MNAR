@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 ## Details
 
-A R package for Missing Not at Random non-response and missing data (selection bias, non-ingorable non-response, informative missing data)
+A R package for Missing Not at Random non-response and missing data (selection bias, non-ingorable non-response, informative missing data).
 
 ## Funding
 
