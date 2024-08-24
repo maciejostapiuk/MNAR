@@ -8,7 +8,7 @@
 #' @param Xs A matrix of calibration variables
 #' @param Zs A matrix of instrumental variables
 #' @param d A vector of initial weights, derived from sampling design
-#' @param totals A vector of population totals (including totals for both Xs and Zs)
+#' @param pop_totals A vector of population totals (including totals for both Xs and Zs)
 #' @param method a method upon which the `sampling::gencalib()` function will be called
 #' @param eps describes desired accuracy level in any convergence-related
 #' @param maxit maximum number of iterations for `sampling::gencalib()` since it works iteratively
@@ -86,14 +86,40 @@ gencal <- function(Xs, Zs, d, pop_totals, method="raking", eps, maxit, tol) {
 
   } else if (ncol(Zs) < ncol(Xs)) {
     ## reduction of Xs's dimension
-    A_0_t <- MASS::ginv(t(Xs) %*% Xs) %*% (t(Xs) %*% Zs)
-    x_tilde <- Xs %*% A_0_t
+    #A_0_t <- MASS::ginv(t(Xs) %*% Xs) %*% (t(Xs) %*% Zs)
+    #x_tilde <- Xs %*% A_0_t
 
     ## analogous for totals
-    Zs_totals <- matrix(as.numeric(matrix(t(pop_totals)[, c("N",intersect(colnames(Zs), colnames(t(pop_totals)))), drop=FALSE])))
-    totals <- matrix(as.numeric(matrix(t(pop_totals)[, c("N",intersect(colnames(Xs), colnames(t(pop_totals)))), drop=FALSE])))
-    A_0_t_totals <- totals %*% t(Zs_totals) * as.numeric(1/(t(totals) %*% totals))
-    totals_tilde <- t(t(totals) %*% A_0_t_totals)
+    #Zs_totals <- matrix(as.numeric(matrix(t(pop_totals)[, c("N",intersect(colnames(Zs), colnames(t(pop_totals)))), drop=FALSE])))
+    #totals <- matrix(as.numeric(matrix(t(pop_totals)[, c("N",intersect(colnames(Xs), colnames(t(pop_totals)))), drop=FALSE])))
+    #A_0_t_totals <- totals %*% t(Zs_totals) * as.numeric(1/(t(totals) %*% totals))
+    #totals_tilde <- t(t(totals) %*% A_0_t_totals)
+
+    alpha_prime <- Vectorize(function(xg) {
+      return(1/(1+exp(-xg))) #Example logistic function
+    })
+
+    compute_Q <- function(g) {
+      xg <- t(Zs) %*% g
+      alpha_prime_values <- alpha_prime(xg)
+      weighted_z_j <- t((matrix(d)%*%alpha_prime_values)) %*% Xs    ##Computes Q from Kott and Liao (2017)
+      Q_inv_sum <- Zs %*% (weighted_z_j %*% t(Xs)) %*% Zs
+      Q <- MASS::ginv((1/N) * Q_inv_sum)
+      return(Q)
+    }
+
+    residual_function <- function(g) {
+      Q <- compute_Q(g)
+      residuals <- matrix(d) %*% alpha_prime(t(Zs) %*% g) %*% t((t(t(Zs) %*% Xs) %*% Q %*%Zs))*(1/N)
+
+      return(sum(residuals^2))  # Returns the sum of squares of residuals
+    }
+
+    # Optimization to find g
+    initial_g <- rep(1, nrow(sample))  # Starting guess for g
+    result <- optim(par = initial_g, fn = residual_function, control = c(maxit = 100))
+
+
 
     g <- sampling::gencalib(Xs = x_tilde,
                             Zs = Zs,
@@ -105,9 +131,4 @@ gencal <- function(Xs, Zs, d, pop_totals, method="raking", eps, maxit, tol) {
   return(g)
 
 }
-
-
-
-
-
 
