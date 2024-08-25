@@ -94,10 +94,17 @@ gencal <- function(Xs, Zs, d, pop_totals, method="raking", eps, maxit, tol) {
     #totals <- matrix(as.numeric(matrix(t(pop_totals)[, c("N",intersect(colnames(Xs), colnames(t(pop_totals)))), drop=FALSE])))
     #A_0_t_totals <- totals %*% t(Zs_totals) * as.numeric(1/(t(totals) %*% totals))
     #totals_tilde <- t(t(totals) %*% A_0_t_totals)
+    alpha <- Vectorize(function(xg) {
+      return(1 / (1 + exp(-xg)))  #Example logistic function
+
+    })
+
 
     alpha_prime <- Vectorize(function(xg) {
-      return(1/(1+exp(-xg))) #Example logistic function
+      return(exp(-xg) / (1 + exp(-xg))^2)  # Logistic function derivative
     })
+
+    N <- pop_totals[1]
 
     compute_Q <- function(g) {
       xg <- t(Zs) %*% g
@@ -116,10 +123,10 @@ gencal <- function(Xs, Zs, d, pop_totals, method="raking", eps, maxit, tol) {
     }
 
     # Optimization to find g
-    initial_g <- rep(1, nrow(sample))  # Starting guess for g
-    result <- optim(par = initial_g, fn = residual_function, control = c(maxit = 100))
+    initial_g <- d  # Starting guess for g
+    result <- optim(par = initial_g, fn = residual_function, control = c(maxit = maxit))$par
 
-
+    print(result)
 
     g <- sampling::gencalib(Xs = x_tilde,
                             Zs = Zs,
