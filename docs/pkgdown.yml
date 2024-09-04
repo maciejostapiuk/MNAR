@@ -2,8 +2,9 @@ pandoc: 3.1.11
 pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
+  calibration_weighting: calibration_weighting.html
   theory: theory.html
-last_built: 2024-08-23T10:28Z
+last_built: 2024-09-04T21:24Z
 urls:
   reference: https://maciejostapiuk.github.io/MNAR/reference
   article: https://maciejostapiuk.github.io/MNAR/articles
