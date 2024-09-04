@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Theory for missing not at random non-response correction • MNAR</title>
+<title>Calibration weighting • MNAR</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Theory for missing not at random non-response correction">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Calibration weighting">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -55,116 +55,17 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Theory for missing not at random non-response correction</h1>
+      <h1>Calibration weighting</h1>
                         <h4 data-toc-skip class="author">Maciej Ostapiuk
 and Maciej Beręsewicz</h4>
             
       
 
-      <div class="d-none name"><code>theory.Rmd</code></div>
+      <div class="d-none name"><code>calibration_weighting.Rmd</code></div>
     </div>
 
     
     
-<div class="section level2">
-<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-</h2>
-<p>This document reveals all the theory needed to understand methodology
-behind correction of missing not at random type of non-responses in
-survey samples. It covers methods such as:</p>
-<ol style="list-style-type: decimal">
-<li><p><strong>Generalized calibration</strong></p></li>
-<li><p><strong>Generalized calibration with more variables in
-calibration than response model</strong></p></li>
-<li><p><strong>Generalized method of moments</strong> (also known as
-<em>GMM</em>)</p></li>
-<li><p><strong>Empirical likelihood estimation</strong></p></li>
-<li><p><strong>Non-parametric methods</strong></p></li>
-<li><p><strong>Exponential tilting</strong></p></li>
-<li><p><strong>Latent approach</strong></p></li>
-</ol>
-<p>Knowledge included in this particular paper allows one to understand
-correction techniques and should be treated by one as supplementary
-resource to our <strong>R</strong> programming language package called
-<code>MNAR</code>.</p>
-</div>
-<div class="section level2">
-<h2 id="interpretation-of-missing-not-at-random">Interpretation of Missing Not at Random<a class="anchor" aria-label="anchor" href="#interpretation-of-missing-not-at-random"></a>
-</h2>
-<p>In statistical surveys, missing data plays the most important role in
-the family of non-random errors. Their presence affects the process of
-estimating the unknown global values of a population by biasing given
-estimators and reducing their precision. The reason for such behavior
-lies in the characteristics of differences between
-respondents—participants who answered every question—and those
-participants who did not manage to provide answers to every question
-(<em>item non-response</em>) or did not answer at all (<em>unit
-non-response</em>), called non-respondents.</p>
-<p>There happens to be a bunch of methods to deal with non-responses.
-However, the main idea behind the construction of them allows us to
-categorize them—we could split them into weighting methods and
-imputation methods. In most cases, one is able to determine which of the
-above groups of methods shall be used.</p>
-<p>The imputation methods are used when dealing with item
-non-response—questions with a lack of answers are being corrected by,
-e.g., replenishing missing data. The weighting methods shall be used
-when dealing with unit non-responses in order to correct, by using a set
-of auxiliary variables, the weights of respondents and non-respondents
-in the sample such that known population totals are being reproduced.
-The choice of mentioned auxiliary variables matters and is strictly tied
-to the estimation process, thus it arises as the biggest problem in this
-category of methods. One might use a combination of both kinds of
-methods to eliminate the negative impact of non-responses.</p>
-<p>Investigation of the described methodology starts with an explanation
-of the assumptions, settings, and notation behind sampling, responding,
-and estimation. Starting with the basic notation, let
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>U</mi><annotation encoding="application/x-tex">U</annotation></semantics></math>
-denote the population of size
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>
-with a probability sample
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
-of length
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>⊆</mo><mi>U</mi></mrow><annotation encoding="application/x-tex">s \subseteq U</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≤</mo><mi>N</mi></mrow><annotation encoding="application/x-tex">n \leq N</annotation></semantics></math>.
-According to the sampling design, let
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mi>k</mi></msub><annotation encoding="application/x-tex">\pi_k</annotation></semantics></math>
-denote first-order inclusion probability of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>-th
-element of population
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>U</mi><annotation encoding="application/x-tex">U</annotation></semantics></math>
-in sample
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>.
-Thus, under given sampling design,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>k</mi></msub><mo>=</mo><mfrac><mn>1</mn><msub><mi>π</mi><mi>k</mi></msub></mfrac></mrow><annotation encoding="application/x-tex">d_k = \frac{1}{\pi_k}</annotation></semantics></math>
-denotes an initial weight of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>-th
-element. Our main goal, when dealing with survey data, is to estimate
-the total of population
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>U</mi><annotation encoding="application/x-tex">U</annotation></semantics></math>,
-written as
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>=</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>y</mi><mi>k</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}\label{eq:Pop. total}
-Y = \sum_{k=1}^{N}{y_k},
-\end{equation}</annotation></semantics></math> where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>y</mi><mi>k</mi></msub><annotation encoding="application/x-tex">y_k</annotation></semantics></math>
-is value of target variable
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
-for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>-th
-element,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>.</mi><mi>.</mi><mi>.</mi><mo>,</mo><mi>N</mi></mrow><annotation encoding="application/x-tex">k = 1,...,N</annotation></semantics></math>.
-Natural and usual choice here is to consider Horvitz-Thompson estimator
-of the form:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>Y</mi><mo accent="true">̂</mo></mover><mtext mathvariant="normal">HT</mtext></msub><mo>=</mo><munder><mo>∑</mo><mrow><mi>k</mi><mo>∈</mo><mi>s</mi></mrow></munder><mrow><msub><mi>d</mi><mi>k</mi></msub><msub><mi>y</mi><mi>k</mi></msub></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}\label{eq:HT estimator}
-\hat{Y}_{\text{HT}} = \sum_{k \in s}{d_k y_k}.
-\end{equation}</annotation></semantics></math> By design,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>Y</mi><mo accent="true">̂</mo></mover><mtext mathvariant="normal">HT</mtext></msub><annotation encoding="application/x-tex">\hat{Y}_{\text{HT}}</annotation></semantics></math>
-is an unbiased estimator. If there happens to be non-respondents in the
-sample, then the summation is done over the subset
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math>
-of respondents,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>⊆</mo><mi>s</mi></mrow><annotation encoding="application/x-tex">r \subseteq s</annotation></semantics></math>.</p>
-</div>
 <div class="section level2">
 <h2 id="weighting-methods">Weighting methods<a class="anchor" aria-label="anchor" href="#weighting-methods"></a>
 </h2>
