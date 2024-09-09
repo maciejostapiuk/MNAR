@@ -11,7 +11,7 @@ flag <- rbinom(n, 1, pop_data$pr)
 sample <- pop_data[flag == 1, ]
 sample$d <- n/nrow(sample)
 
-totals$y <- sum(sample$d * sample$y)
+
 # check if it is working --------------------------------------------------
 expect_silent(
   g <- mnar(response = ~ x1 + y,

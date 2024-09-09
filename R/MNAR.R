@@ -134,7 +134,7 @@ mnar <- function(response,
   Xs <- stats::model.matrix(calibration, data = data)
   Zs <- stats::model.matrix(response, data = data)
   if (method == "gencalib") {
-    if("y" %in% all.vars(response)) {
+    if("y" %in% all.vars(response)&& ncol(Zs) < ncol(Xs)) {
     pop_totals["y"] <-  sum(sample$d * sample$y)
     }
     weights <- gencal(Xs=Xs, Zs=Zs, d=dweights, pop_totals=pop_totals,

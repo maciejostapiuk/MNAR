@@ -76,7 +76,6 @@
 #' @export
 gencal <- function(Xs, Zs, d, pop_totals, method="raking", eps, maxit, tol) {
   if (ncol(Zs) == ncol(Xs)) {
-    totals <- matrix(t(as.data.frame(pop_totals))[, c("N",intersect(colnames(Xs), colnames(t(as.data.frame(pop_totals))))), drop=FALSE])
     g <- sampling::gencalib(Xs = Xs,
                             Zs = Zs,
                             d = d,
@@ -107,26 +106,35 @@ gencal <- function(Xs, Zs, d, pop_totals, method="raking", eps, maxit, tol) {
     N <- pop_totals[1]
 
     compute_Q <- function(g) {
-      xg <- t(Zs) %*% g
-      alpha_prime_values <- alpha_prime(xg)
+      Zg <- t(Zs) %*% g
+      alpha_prime_values <- alpha_prime(Zg)
       weighted_z_j <- t((matrix(d)%*%alpha_prime_values)) %*% Xs    ##Computes Q from Kott and Liao (2017)
-      Q_inv_sum <- Zs %*% (weighted_z_j %*% t(Xs)) %*% Zs
+      Q_inv_sum <- weighted_z_j %*% t(Xs)
       Q <- MASS::ginv((1/N) * Q_inv_sum)
       return(Q)
     }
 
     residual_function <- function(g) {
       Q <- compute_Q(g)
-      residuals <- matrix(d) %*% alpha_prime(t(Zs) %*% g) %*% t((t(t(Zs) %*% Xs) %*% Q %*%Zs))*(1/N)
+      s <- t((t(matrix(d) %*% alpha(t(Zs)%*%matrix(initial_g))) %*% Xs)[1,] - d%*%Xs)
+      residuals <- 1/N * t(t(matrix(d) %*% alpha_prime(t(Zs)%*%matrix(initial_g)) %*% t(Zs)%*%Xs) %*% compute_Q(initial_g)) %*% s
 
       return(sum(residuals^2))  # Returns the sum of squares of residuals
     }
 
     # Optimization to find g
-    initial_g <- d  # Starting guess for g
+    initial_g <- rep(1, nrow(sample))  # Starting guess for g
     result <- optim(par = initial_g, fn = residual_function, control = c(maxit = maxit))$par
 
-    print(result)
+    ### x_tilde
+    x_tilde <- t((t(matrix(d) %*% alpha_prime(t(Zs) %*%matrix(result))) %*% Xs)) %*% t(Zs)
+
+
+    #totals
+    z_totals <- matrix(as.numeric(matrix(t(pop_totals)[, c("N",intersect(colnames(Zs), colnames(t(pop_totals)))), drop=FALSE])))
+    totals <- matrix(as.numeric(matrix(t(pop_totals)[, c("N",intersect(colnames(Xs), colnames(t(pop_totals)))), drop=FALSE])))
+
+    totals_tilde <- t(totals) %*%  MASS::ginv(d %*% t(totals%*%result)%*%(totals%*%t(totals))) %*% d %*% t(totals%*%result) %*% totals%*%t(z_totals)
 
     g <- sampling::gencalib(Xs = x_tilde,
                             Zs = Zs,
