@@ -22,6 +22,7 @@ Imports:
   sampling, 
   MASS,
   mathjaxr
+  momentfit
 Suggests: 
   tinytest,
   knitr,

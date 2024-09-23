@@ -2,6 +2,7 @@
 #' @import mathjaxr
 #' @importFrom sampling gencalib
 #' @importFrom MASS ginv
+#' @importFrom momentfit momentModel, gelFit
 #' @title The main function for the not missing at random non-response
 #' @author Maciej Ostapiuk, Maciej Beręsewicz
 #'
@@ -21,6 +22,7 @@
 #' @param maxit maxit `50`
 #' @param eps eps for inverse `.Machine$double.eps`
 #' @param control control for methods
+#' @param theta0 vector of initial moment conditions for GMM and EL
 #' @param ... TBA
 #' @references
 #'
@@ -123,6 +125,7 @@ mnar <- function(response,
                  svydesign,
                  dweights,
                  pop_totals,
+                 theta_0,
                  method = c("gencalib", "emplik", "gmm"),
                  tol = 1e-8,
                  eps = .Machine$double.eps,
@@ -140,6 +143,10 @@ mnar <- function(response,
     weights <- gencal(Xs=Xs, Zs=Zs, d=dweights, pop_totals=pop_totals,
                       method="raking",
                       eps=eps, maxit=maxit, tol=tol)
+  }
+  else if(method =="emplik"){
+
+   return(emplik(target,response, theta_0 = theta_0, data = data))
   }
   ## return at the end
   return(weights)
