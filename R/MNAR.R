@@ -3,7 +3,7 @@
 #' @importFrom sampling gencalib
 #' @importFrom MASS ginv
 #' @importFrom momentfit momentModel
-#' @importFrom momentfit gelFit
+#' @importFrom momentfit gmmFit
 #' @title The main function for the not missing at random non-response
 #' @author Maciej Ostapiuk, Maciej Beręsewicz
 #'

@@ -1,6 +1,6 @@
 #' Importing
 #' @importFrom momentfit momentModel
-#' @importFrom momentfit gelFit
+#' @importFrom momentfit gmmFit
 #'
 #' @title empirical likelihood method based on momentfit package
 #'
@@ -19,7 +19,7 @@ emplik <- function(target,
   target_formula <- as.formula(target)
   instr_formula <- as.formula(instr)
   model <- momentfit::momentModel(target_formula, instr_formula, data = data, theta0 = theta_0, vcov = "iid")
-  return(momentfit::gelFit(model))
+  return(momentfit::gmmFit(model))
 }
 
 
