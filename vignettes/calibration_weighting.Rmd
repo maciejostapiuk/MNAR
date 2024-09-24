@@ -64,7 +64,6 @@ knitr::opts_chunk$set(
 \newcommand{\Exp}{\operatorname{Exp}}
 \newcommand{\Ber}{\operatorname{Bernoulli}}
 \newcommand{\Uni}{\operatorname{Uniform}}
-\newcommand{\argmin}{\operatorname{argmin}}
 
 
 

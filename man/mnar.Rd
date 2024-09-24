@@ -12,13 +12,13 @@ mnar(
   data,
   svydesign,
   dweights,
-  N,
   pop_totals,
+  theta_0,
   method = c("gencalib", "emplik", "gmm"),
   tol = 1e-08,
-  maxit = 100,
   eps = .Machine$double.eps,
   control = NULL,
+  maxit = 100,
   ...
 )
 }
@@ -37,21 +37,23 @@ mnar(
 
 \item{dweights}{design weights}
 
-\item{N}{population size}
-
 \item{pop_totals}{population totals (for both calibration and response)}
 
 \item{method}{methods \code{c("gencalib", "emplik", "gmm")}}
 
 \item{tol}{tolerance \code{1e-8}}
 
-\item{maxit}{maxit \code{50}}
-
 \item{eps}{eps for inverse \code{.Machine$double.eps}}
 
 \item{control}{control for methods}
 
+\item{maxit}{maxit \code{50}}
+
 \item{...}{TBA}
+
+\item{N}{population size}
+
+\item{theta0}{vector of initial moment conditions for GMM and EL}
 }
 \value{
 Returns a list with containing:\cr

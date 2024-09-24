@@ -1,0 +1,120 @@
+---
+title: "Empirical Likelihood Method"
+author: "Maciej Ostapiuk and Maciej Beręsewicz"
+output: 
+    html_vignette:
+        df_print: kable
+        toc: true
+        number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Empirical Likelihood Method}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+link-citations: true
+header-includes: 
+  - \usepackage{amsmath}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\df}{\text{d}}
+\DeclareMathOperator*{\E}{\mathbb{E}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\DeclareMathOperator*{\plim}{plim}
+\newcommand{\1}{\mathmybb{1}}
+\allowdisplaybreaks
+
+\newcommand{\bX}{\boldsymbol{X}}
+\newcommand{\bx}{\boldsymbol{x}}
+\newcommand{\bY}{\boldsymbol{Y}}
+\newcommand{\by}{\boldsymbol{y}}
+\newcommand{\bh}{\boldsymbol{h}}
+\newcommand{\bg}{\boldsymbol{g}}
+\newcommand{\bH}{\boldsymbol{H}}
+\newcommand{\ba}{\boldsymbol{a}}
+\newcommand{\bp}{\boldsymbol{p}}
+\newcommand{\bA}{\boldsymbol{A}}
+\newcommand{\bw}{\boldsymbol{w}}
+\newcommand{\bd}{\boldsymbol{d}}
+\newcommand{\bZ}{\boldsymbol{Z}}
+\newcommand{\bz}{\boldsymbol{z}}
+\newcommand{\bv}{\boldsymbol{v}}
+\newcommand{\bb}{\boldsymbol{b}}
+\newcommand{\bu}{\boldsymbol{u}}
+\newcommand{\bU}{\boldsymbol{U}}
+\newcommand{\bQ}{\boldsymbol{Q}}
+\newcommand{\bG}{\boldsymbol{G}}
+\newcommand{\HT}{\text{\rm HT}}
+
+\newcommand{\bbeta}{\boldsymbol{\beta}}
+\newcommand{\balpha}{\boldsymbol{\alpha}}
+\newcommand{\btau}{\boldsymbol{\tau}}
+\newcommand{\bgamma}{\boldsymbol{\gamma}}
+\newcommand{\bGamma}{\boldsymbol{\Gamma}}
+\newcommand{\btheta}{\boldsymbol{\theta}}
+\newcommand{\blambda}{\boldsymbol{\lambda}}
+\newcommand{\bPhi}{\boldsymbol{\Phi}}
+\newcommand{\bEta}{\boldsymbol{\eta}}
+
+\newcommand{\bZero}{\boldsymbol{0}}
+\newcommand{\indicator}{\mathmybb{1}}
+
+\newcommand{\colvec}{\operatorname{colvec}}
+\newcommand{\logit}{\operatorname{logit}}
+\newcommand{\Exp}{\operatorname{Exp}}
+\newcommand{\Ber}{\operatorname{Bernoulli}}
+\newcommand{\Uni}{\operatorname{Uniform}}
+\newcommand{\argmin}{\operatorname{argmin}}
+
+# Empirical Likelihood Method
+To consider the empirical likelihood under non-ignorable missing data, one has to discuss the distribution function of multidimensional random variable $(\bX,Y)$ which is determined by its distribution function $F(x,y)$. There are no assumptions on $F(x,y)$ (except the fact that it has to fit CDF assumptions) but there is a setting in @kim_statistical_2013, that
+\begin{equation}\label{eq: setting on (X,Y)}
+\E\{U(\btheta_0; X,Y)\} = 0 
+\end{equation}
+which is a $m$-dimensional, linearly independent vector, $U(\cdot) \in \mathcal{C}^2$ and $\btheta_0 \in \Omega \subseteq \mathbb{R}^p$. if $m = p$, then a consistent estimator of $\btheta_0$ is a solution of:
+\begin{equation}\label{eq: consistent estimator of btheta under m = p}
+\sum_{i=1}^{n} U(\btheta, \bx_i, y).
+\end{equation}
+When $m > p$ the model is called \textit{over-identified}, thus one has to adjust the methodology which results in different optimization problem, since \ref{eq: consistent estimator of btheta under m = p} might not provide solution at all. This adjustment is also proposed in @kim_statistical_2013 and the EL approach is concentrated around finding a solution $\btheta$ that maximizes the empirical likelihood function of $\btheta$:
+\begin{equation}\label{eq: EL solution for m>p}
+L(\btheta) = \argmax_{\btheta}\left\{\prod_{i=1}^n p_i: p_i>0, \sum_{i=1}^np_i \wedge \sum_{i=1}^n p_i U(\btheta; \bx_i, y_i) = 0\right\}.
+\end{equation}
+Using the Lagrange multiplier method, lets denote
+\begin{equation}
+    \hat{p}_i(\btheta)  =\frac{1}{n} \frac{1}{1+\hat{\lambda}_{\btheta}'U(\theta; \bx_i, y_i)}.
+\end{equation}
+Thus, the MEL estimator is being obtained by maximizing
+\begin{equation} \label{eq: empirical likelihood method estimator}
+l_e(\btheta) = \sum_{i=1}^n\log\{\hat{p}_i(\btheta)\}.
+\end{equation}
+When dealing with any missingness in data, (recall, that we do have $\bx_i$ for any individual and $y_i$ is only observed for respondents) the scoring of propensity is applied in such fashion:
+
+- let $R$ be a response indicator ($R_i=1$ if $y_i$ is observed and $R_i=0$ if $y_i$ is unobserved),
+- denote response propensity as $\pi(\bx;\phi) = P(R =1|\bx)$ (MNAR mechanism provides lack of $y_i$ in conditioning),
+- let $S(\phi; R, \bx)$ be the score function of $\phi$ s.t. $\E\{S(\phi; R, \bx)\} = 0$ holds.
+  
+Thus,  $\E\{S(\phi; R, \bx)\} = 0$ is one of the moment conditions, along with second one of form:
+\begin{equation}\label{eq: second moment condition for EL by PS}
+\E\left\{\frac{R}{\pi(\bX;\phi)}U(\btheta,\bX, Y)\right\} = 0
+\end{equation}
+Those two moment conditions allows us to perform propensity-score-based MELE by maximizing:
+\begin{equation}\label{eq: MELE by PS}
+L(\btheta, \phi) = \argmax\left\{\prod_{i=1}^n p_i: \bp \in B(\btheta, \phi) \right\},
+\end{equation}
+where
+\begin{equation}\label{eq: F(\btheta, \phi) definition}
+B(\btheta, \phi) = \left\{\bp: p_i>0, \sum_{i=1}^np_i, \sum_{i=1}^n p_i\frac{R_i}{\pi(\bx_i;\phi)} U(\btheta; \bx_i, y_i) = 0\, \sum_{i=1}^n p_i S(\phi; R_i, \bx_i) = 0 \right\}.
+\end{equation}
+
+# References

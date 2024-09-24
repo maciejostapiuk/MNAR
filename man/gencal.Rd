@@ -13,6 +13,8 @@ gencal(Xs, Zs, d, pop_totals, method = "raking", eps, maxit, tol)
 
 \item{d}{A vector of initial weights, derived from sampling design}
 
+\item{pop_totals}{A vector of population totals (including totals for both Xs and Zs)}
+
 \item{method}{a method upon which the \code{sampling::gencalib()} function will be called}
 
 \item{eps}{describes desired accuracy level in any convergence-related}
@@ -20,8 +22,6 @@ gencal(Xs, Zs, d, pop_totals, method = "raking", eps, maxit, tol)
 \item{maxit}{maximum number of iterations for \code{sampling::gencalib()} since it works iteratively}
 
 \item{tol}{desired tolerance}
-
-\item{totals}{A vector of population totals (including totals for both Xs and Zs)}
 }
 \description{
 Importing

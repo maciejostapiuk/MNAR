@@ -21,7 +21,7 @@ RdMacros: mathjaxr
 Imports: 
   sampling, 
   MASS,
-  mathjaxr
+  mathjaxr,
   momentfit
 Suggests: 
   tinytest,

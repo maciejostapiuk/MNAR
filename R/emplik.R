@@ -1,5 +1,6 @@
 #' Importing
-#' @importFrom momentfit momentModel, gelFit
+#' @importFrom momentfit momentModel
+#' @importFrom momentfit gelFit
 #'
 #' @title empirical likelihood method based on momentfit package
 #'
