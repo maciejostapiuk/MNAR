@@ -156,13 +156,10 @@ conditions allows us to perform propensity-score-based MELE by
 maximizing:
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛉</mi><mo>,</mo><mi>ϕ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>arg max</mo><mrow><mo stretchy="true" form="prefix">{</mo><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mi>p</mi><mi>i</mi></msub><mo>:</mo><mi>𝐩</mi><mo>∈</mo><mi>B</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛉</mi><mo>,</mo><mi>ϕ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">}</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}\label{eq: MELE by PS}
 L(\boldsymbol{\theta}, \phi) = \mathop{\mathrm{arg\,max}}\left\{\prod_{i=1}^n p_i: \boldsymbol{p}\in B(\boldsymbol{\theta}, \phi) \right\},
-\end{equation}</annotation></semantics></math> where <span class="math display">$$\begin{equation}\label{eq: F(\boldsymbol{\theta},
-\phi) definition}
-B(\boldsymbol{\theta}, \phi) = \left\{\boldsymbol{p}: p_i&gt;0,
-\sum_{i=1}^np_i, \sum_{i=1}^n p_i\frac{R_i}{\pi(\boldsymbol{x}_i;\phi)}
-U(\boldsymbol{\theta}; \boldsymbol{x}_i, y_i) = 0\, \sum_{i=1}^n p_i
-S(\phi; R_i, \boldsymbol{x}_i) = 0 \right\}.
-\end{equation}$$</span></p>
+\end{equation}</annotation></semantics></math> where
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛉</mi><mo>,</mo><mi>ϕ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mi>𝐩</mi><mo>:</mo><msub><mi>p</mi><mi>i</mi></msub><mo>&gt;</mo><mn>0</mn><mo>,</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mi>p</mi><mi>i</mi></msub><mo>,</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mi>p</mi><mi>i</mi></msub><mfrac><msub><mi>R</mi><mi>i</mi></msub><mrow><mi>π</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐱</mi><mi>i</mi></msub><mo>;</mo><mi>ϕ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><mi>U</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛉</mi><mo>;</mo><msub><mi>𝐱</mi><mi>i</mi></msub><mo>,</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>0</mn><mspace width="0.167em"></mspace><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mi>p</mi><mi>i</mi></msub><mi>S</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>ϕ</mi><mo>;</mo><msub><mi>R</mi><mi>i</mi></msub><mo>,</mo><msub><mi>𝐱</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>0</mn><mo stretchy="true" form="postfix">}</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
+B(\boldsymbol{\theta}, \phi) = \left\{\boldsymbol{p}: p_i&gt;0, \sum_{i=1}^np_i, \sum_{i=1}^n p_i\frac{R_i}{\pi(\boldsymbol{x}_i;\phi)} U(\boldsymbol{\theta}; \boldsymbol{x}_i, y_i) = 0\, \sum_{i=1}^n p_i S(\phi; R_i, \boldsymbol{x}_i) = 0 \right\}.
+\end{equation}</annotation></semantics></math></p>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
