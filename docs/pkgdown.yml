@@ -3,8 +3,9 @@ pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   calibration_weighting: calibration_weighting.html
+  empirical_likelihood_estimation: empirical_likelihood_estimation.html
   theory: theory.html
-last_built: 2024-09-24T10:29Z
+last_built: 2024-09-24T16:07Z
 urls:
   reference: https://maciejostapiuk.github.io/MNAR/reference
   article: https://maciejostapiuk.github.io/MNAR/articles

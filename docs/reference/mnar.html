@@ -19,6 +19,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/calibration_weighting.html">Calibration weighting</a></li>
+    <li><a class="dropdown-item" href="../articles/empirical_likelihood_estimation.html">Empirical Likelihood Method</a></li>
     <li><a class="dropdown-item" href="../articles/theory.html">Theory for missing not at random non-response correction</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -50,13 +51,13 @@
 <span>  <span class="va">data</span>,</span>
 <span>  <span class="va">svydesign</span>,</span>
 <span>  <span class="va">dweights</span>,</span>
-<span>  <span class="va">N</span>,</span>
 <span>  <span class="va">pop_totals</span>,</span>
+<span>  <span class="va">theta_0</span>,</span>
 <span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gencalib"</span>, <span class="st">"emplik"</span>, <span class="st">"gmm"</span><span class="op">)</span>,</span>
 <span>  tol <span class="op">=</span> <span class="fl">1e-08</span>,</span>
-<span>  maxit <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  eps <span class="op">=</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span>,</span>
 <span>  control <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  maxit <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -93,10 +94,6 @@
 <dd><p>design weights</p></dd>
 
 
-<dt id="arg-n">N<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
-<dd><p>population size</p></dd>
-
-
 <dt id="arg-pop-totals">pop_totals<a class="anchor" aria-label="anchor" href="#arg-pop-totals"></a></dt>
 <dd><p>population totals (for both calibration and response)</p></dd>
 
@@ -109,10 +106,6 @@
 <dd><p>tolerance <code>1e-8</code></p></dd>
 
 
-<dt id="arg-maxit">maxit<a class="anchor" aria-label="anchor" href="#arg-maxit"></a></dt>
-<dd><p>maxit <code>50</code></p></dd>
-
-
 <dt id="arg-eps">eps<a class="anchor" aria-label="anchor" href="#arg-eps"></a></dt>
 <dd><p>eps for inverse <code>.Machine$double.eps</code></p></dd>
 
@@ -121,8 +114,20 @@
 <dd><p>control for methods</p></dd>
 
 
+<dt id="arg-maxit">maxit<a class="anchor" aria-label="anchor" href="#arg-maxit"></a></dt>
+<dd><p>maxit <code>50</code></p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>TBA</p></dd>
+
+
+<dt id="arg-n">N<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
+<dd><p>population size</p></dd>
+
+
+<dt id="arg-theta-">theta0<a class="anchor" aria-label="anchor" href="#arg-theta-"></a></dt>
+<dd><p>vector of initial moment conditions for GMM and EL</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -3,7 +3,8 @@
 #' @importFrom sampling gencalib
 #' @importFrom MASS ginv
 #' @importFrom momentfit momentModel
-#' @importFrom momentfit gmmFit
+#' @importFrom momentfit gelFit
+#' @importFrom momentfit getImpProb
 #' @title The main function for the not missing at random non-response
 #' @author Maciej Ostapiuk, Maciej Beręsewicz
 #'
@@ -147,7 +148,7 @@ mnar <- function(response,
   }
   else if(method =="emplik"){
 
-   return(emplik(target,response, theta_0 = theta_0, data = data))
+   weights <-emplik(target,response, theta_0 = theta_0, data = data)
   }
   ## return at the end
   return(weights)

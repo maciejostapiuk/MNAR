@@ -35,20 +35,9 @@ theta_0 = c(1,1,1)
 expect_silent(
   result <- mnar(
     calibration =  ~ x1 + x2,
-    response = ~ x1 +y,
+    response = ~ x1+x3,
     target = y ~ x1 + x2,
     data = sample,
     theta_0 = theta_0,
     method = "emplik")
 )
-
-
-
-
-
-
-
-
-
-
-

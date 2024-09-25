@@ -113,7 +113,7 @@ Those two moment conditions allows us to perform propensity-score-based MELE by 
 L(\btheta, \phi) = \argmax\left\{\prod_{i=1}^n p_i: \bp \in B(\btheta, \phi) \right\},
 \end{equation}
 where
-\begin{equation}\label{eq: F(\btheta, \phi) definition}
+\begin{equation}
 B(\btheta, \phi) = \left\{\bp: p_i>0, \sum_{i=1}^np_i, \sum_{i=1}^n p_i\frac{R_i}{\pi(\bx_i;\phi)} U(\btheta; \bx_i, y_i) = 0\, \sum_{i=1}^n p_i S(\phi; R_i, \bx_i) = 0 \right\}.
 \end{equation}
 
