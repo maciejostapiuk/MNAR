@@ -147,8 +147,7 @@ mnar <- function(response,
                       eps=eps, maxit=maxit, tol=tol)
   }
   else if(method =="emplik"){
-
-   weights <-emplik(target,response, theta_0 = theta_0, data = data)
+   weights <-emplik(target,response,theta_0 = theta_0, data = data, totals = totals[all.vars(response)]/totals["N"], dweights = sample$d)
   }
   ## return at the end
   return(weights)
