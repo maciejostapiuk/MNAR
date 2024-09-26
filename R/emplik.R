@@ -25,8 +25,8 @@ emplik <- function(target,
   #fit <-momentfit::gelFit(model)
   #weights <-momentfit::getImpProb(fit)$pt
   Xs <-  model.matrix(instr, data = data)
-  Xs <-  matrix(Xs[, all.vars(instr)])
-  if(ncol(Xs) == 1){
+  if(length(instr) == 1){
+    Xs <- matrix(Xs[, all.vars(instr)])
     L <- -1 / max(Xs - totals)
     R <- -1 / min(Xs - totals)
     dif <- 1
@@ -41,6 +41,46 @@ emplik <- function(target,
     standarized_ds <- dweights/sum(dweights)
     imp_probs <-  standarized_ds/(1 + M*(Xs - totals))
   }
+  else if(length(instr) > 1){
+    Xs <-  Xs[,-1]
+    n <- length(dweights)
+    mu <- matrix(totals)
+    dweights <-  matrix(dweights)
+    u <- Xs - rep(1, n) %*% t(mu)
+
+    M <- 0 * mu
+    dif <- 1
+    tol <- 1e-08
+
+    while (dif > tol) {
+      D1 <- 0 * mu
+      DD <- D1 %*% t(D1)
+
+      for (i in 1:n) {
+        aa <- as.numeric(1 + t(M) %*% u[i, ])
+        D1 <- D1 + dweights[i] * u[i, ] / aa
+        DD <- DD - dweights[i] * (u[i, ] %*% t(u[i, ])) / aa^2
+      }
+      D2 <- solve(DD, D1, tol = 1e-12)
+      dif <- max(abs(D2))
+      rule <- 1
+      while (rule > 0) {
+        rule <- 0
+        if (min(1 + t(M - D2) %*% t(u)) <= 0)
+          rule <- rule + 1
+        if (rule > 0)
+          D2 <- D2 / 2
+      }
+      M <- M - D2
+    }
+    standarized_ds <- dweights/sum(dweights)
+    imp_probs <-  numeric(n)
+    for (i in 1:n) {
+      lambda_term <- t(M)%*%u[i,]
+      imp_probs[i] <-  standarized_ds[i]/(1+lambda_term)
+
+  }}
   return(imp_probs)
 }
+
 

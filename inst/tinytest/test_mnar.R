@@ -1,5 +1,5 @@
 set.seed(123)
-n <- 10000
+n <- 1000
 x1 <- rlnorm(n, 0, 1)
 x2 <- rexp(n, 1)
 x3 <- rpois(n,2)
@@ -33,7 +33,7 @@ expect_silent(
 
 theta_0 = c(1,1,1)
 expect_silent(
-  g <- mnar(response = ~ x1,
+  g <- mnar(response = ~ x1+x2,
             calibration =  ~ x1 + x2,
             target = y~x1+x2,
             data = sample, dweights = sample$d,
