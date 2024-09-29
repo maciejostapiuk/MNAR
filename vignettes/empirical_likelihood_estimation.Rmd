@@ -101,7 +101,7 @@ l_e(\btheta) = \sum_{i=1}^n\log\{\hat{p}_i(\btheta)\}.
 When dealing with any missingness in data, (recall, that we do have $\bx_i$ for any individual and $y_i$ is only observed for respondents) the scoring of propensity is applied in such fashion:
 
 - let $R$ be a response indicator ($R_i=1$ if $y_i$ is observed and $R_i=0$ if $y_i$ is unobserved),
-- denote response propensity as $\pi(\bx;\phi) = P(R =1|\bx)$ (MNAR mechanism provides lack of $y_i$ in conditioning),
+- denote response propensity as $\pi(\bx;\phi) = P(R =1|\bx, y)$
 - let $S(\phi; R, \bx)$ be the score function of $\phi$ s.t. $\E\{S(\phi; R, \bx)\} = 0$ holds.
   
 Thus,  $\E\{S(\phi; R, \bx)\} = 0$ is one of the moment conditions, along with second one of form:
@@ -116,5 +116,10 @@ where
 \begin{equation}
 B(\btheta, \phi) = \left\{\bp: p_i>0, \sum_{i=1}^np_i, \sum_{i=1}^n p_i\frac{R_i}{\pi(\bx_i;\phi)} U(\btheta; \bx_i, y_i) = 0\, \sum_{i=1}^n p_i S(\phi; R_i, \bx_i) = 0 \right\}.
 \end{equation}
-
+There are other ways to estimate parameters using pseudo-ELE framework, for example @kottcheng2010 showed, that $\phi$ might be estimated upon solving:
+\begin{equation}
+\sum_{i =1}^n \left\{\frac{r_i}{\pi(\phi, \bx_i)} - 1\right\}g(\bx_i) = 0,
+\end{equation}
+where $g(\bx_i)$ is supposed to be determined, in order to improve computations. 
+Several ideas, including robust proposition, along with a complex, detailed simulation study might be found in @morikawakim2018
 # References

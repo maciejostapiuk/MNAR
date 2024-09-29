@@ -22,7 +22,8 @@ Imports:
   sampling, 
   MASS,
   mathjaxr,
-  momentfit
+  momentfit,
+  nleqslv
 Suggests: 
   tinytest,
   knitr,
@@ -30,3 +31,4 @@ Suggests:
 VignetteBuilder: knitr
 Language: en-US
 URL: https://maciejostapiuk.github.io/MNAR/
+ś

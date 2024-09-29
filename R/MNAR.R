@@ -5,6 +5,7 @@
 #' @importFrom momentfit momentModel
 #' @importFrom momentfit gelFit
 #' @importFrom momentfit getImpProb
+#' @importFrom nleqslv nleqslv
 #' @title The main function for the not missing at random non-response
 #' @author Maciej Ostapiuk, Maciej Beręsewicz
 #'
@@ -21,10 +22,12 @@
 #' @param pop_totals population totals (for both calibration and response)
 #' @param method methods `c("gencalib", "emplik", "gmm")`
 #' @param tol tolerance `1e-8`
+#' @param g_function a function called as a moment-based function, see Morikawa and Kim (2018)
+#' @param propensity a function to obtain probability of response given outcome (subject to MNAR) and auxiliary information
 #' @param maxit maxit `50`
 #' @param eps eps for inverse `.Machine$double.eps`
 #' @param control control for methods
-#' @param theta0 vector of initial moment conditions for GMM and EL
+#' @param phi_0 vector of initial moment conditions for GMM and EL
 #' @param ... TBA
 #' @references
 #'
@@ -125,9 +128,11 @@ mnar <- function(response,
                  target,
                  data,
                  svydesign,
+                 propensity,
                  dweights,
                  pop_totals,
-                 theta_0,
+                 g_function,
+                 phi_0,
                  method = c("gencalib", "emplik", "gmm"),
                  tol = 1e-8,
                  eps = .Machine$double.eps,
@@ -147,7 +152,8 @@ mnar <- function(response,
                       eps=eps, maxit=maxit, tol=tol)
   }
   else if(method =="emplik"){
-   weights <-emplik(target,response,theta_0 = theta_0, data = data, totals = totals[all.vars(response)]/totals["N"], dweights = sample$d)
+   #weights <-emplik(target,response,theta_0 = theta_0, data = data, totals = totals[all.vars(response)]/totals["N"], dweights = sample$d)
+  weights <-  emplik(sample, Xs, pop_totals, dweights, propensity, g_function, initial_phi = phi_0)
   }
   ## return at the end
   return(weights)

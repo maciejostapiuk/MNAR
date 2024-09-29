@@ -63,61 +63,105 @@ apply(results, 2, FUN = function(x) c(bias = mean(x) - mean(y_true),
                                       rmse = sqrt( (mean(x) - mean(y_true))^2 + var(x))))
 
 
-theta_0 = c(1,1,1)
+# theta_0 = c(1,1,1)
+# n_reps <- 100
+# results <- matrix(0, n_reps, 2)
+# for (r in 1:n_reps) {
+#   flag <- rbinom(n, 1, pop_data$pr)
+#   sample <- pop_data[flag == 1, ]
+#   sample$d <- n/nrow(sample)
+#   #Empirical likelihood
+#   g <- mnar(response = ~ x1,
+#             calibration =  ~ x1 + x2,
+#             target = y~x1+x2,
+#             data = sample, dweights = sample$d,
+#             theta_0 = theta_0,
+#             pop_totals = totals[2]/totals[1],
+#             maxit = 200,
+#             method = "emplik")
+#
+#   # Naive
+#   results[r, 1] <- mean(sample$x1)
+#   results[r, 2] <- weighted.mean(sample$x1, g)
+# }
+#
+# boxplot(results - mean(pop_data$x1), ylim = c(-0.2, 0.2))
+# abline(h = 0, col = "red")
+#
+# x1_true <- pop_data$x1
+# apply(results, 2, FUN = function(x) c(bias = mean(x) - mean(x1_true),
+#                                       sd = sd(x),
+#                                       rmse = sqrt( (mean(x) - mean(x1_true))^2 + var(x))))
+#
+#
+#
+# for (r in 1:n_reps) {
+#   flag <- rbinom(n, 1, pop_data$pr)
+#   sample <- pop_data[flag == 1, ]
+#   sample$d <- n/nrow(sample)
+#   #Empirical likelihood with dim(Xs) > 1
+#   g <- mnar(response = ~ x1+x2,
+#             calibration =  ~ x1 + x2,
+#             target = y~x1+x2,
+#             data = sample, dweights = sample$d,
+#             theta_0 = theta_0,
+#             pop_totals = totals[c(2,3)]/totals[1],
+#             maxit = 200,
+#             method = "emplik")
+#   # Naive
+#   results[r, 1] <- mean(sample$x1)
+#   results[r, 2] <- weighted.mean(sample$x1, g)
+# }
+#
+# boxplot(results - mean(pop_data$x1), ylim = c(-0.2, 0.2))
+# abline(h = 0, col = "red")
+#
+# x1_true <- pop_data$x1
+# apply(results, 2, FUN = function(x) c(bias = mean(x) - mean(x1_true),
+#                                       sd = sd(x),
+#                                       rmse = sqrt( (mean(x) - mean(x1_true))^2 + var(x))))
+#
+g_function <- function(X) {
+  if(is.data.frame(X)) {
+    return(cbind(1, X$x1, X$x2))
+  } else if(is.matrix(X)) {
+    return(X)
+  } else {
+    stop("X must be a data frame or matrix")
+  }
+}
+
+
+response_model <- function(phi, data) {
+  plogis(phi[1] + phi[2]*data$x1 + phi[3]*data$y)
+}
+
 n_reps <- 100
 results <- matrix(0, n_reps, 2)
 for (r in 1:n_reps) {
   flag <- rbinom(n, 1, pop_data$pr)
   sample <- pop_data[flag == 1, ]
   sample$d <- n/nrow(sample)
-  #Empirical likelihood
-  g <- mnar(response = ~ x1,
-            calibration =  ~ x1 + x2,
-            target = y~x1+x2,
-            data = sample, dweights = sample$d,
-            theta_0 = theta_0,
-            pop_totals = totals[2]/totals[1],
-            maxit = 200,
-            method = "emplik")
+  # Generalized calibration
+  g1 <- mnar(response = ~ y,
+             calibration =  ~ x1 + x2,
+             data = sample, dweights = sample$d,
+             pop_totals = totals,
+             propensity = response_model,
+             g_function = g_function,
+             method = "emplik")
 
   # Naive
-  results[r, 1] <- mean(sample$x1)
-  results[r, 2] <- weighted.mean(sample$x1, g)
+  results[r, 1] <- mean(sample$y)
+  results[r, 2] <- weighted.mean(sample$y, g1)
 }
 
-boxplot(results - mean(pop_data$x1), ylim = c(-0.2, 0.2))
+boxplot(results - mean(pop_data$y), ylim = c(-1, 1))
 abline(h = 0, col = "red")
 
-x1_true <- pop_data$x1
-apply(results, 2, FUN = function(x) c(bias = mean(x) - mean(x1_true),
+y_true <- pop_data$y
+apply(results, 2, FUN = function(x) c(bias = mean(x) - mean(y_true),
                                       sd = sd(x),
-                                      rmse = sqrt( (mean(x) - mean(x1_true))^2 + var(x))))
+                                      rmse = sqrt( (mean(x) - mean(y_true))^2 + var(x))))
 
-
-
-for (r in 1:n_reps) {
-  flag <- rbinom(n, 1, pop_data$pr)
-  sample <- pop_data[flag == 1, ]
-  sample$d <- n/nrow(sample)
-  #Empirical likelihood with dim(Xs) > 1
-  g <- mnar(response = ~ x1+x2,
-            calibration =  ~ x1 + x2,
-            target = y~x1+x2,
-            data = sample, dweights = sample$d,
-            theta_0 = theta_0,
-            pop_totals = totals[c(2,3)]/totals[1],
-            maxit = 200,
-            method = "emplik")
-  # Naive
-  results[r, 1] <- mean(sample$x1)
-  results[r, 2] <- weighted.mean(sample$x1, g)
-}
-
-boxplot(results - mean(pop_data$x1), ylim = c(-0.2, 0.2))
-abline(h = 0, col = "red")
-
-x1_true <- pop_data$x1
-apply(results, 2, FUN = function(x) c(bias = mean(x) - mean(x1_true),
-                                      sd = sd(x),
-                                      rmse = sqrt( (mean(x) - mean(x1_true))^2 + var(x))))
 

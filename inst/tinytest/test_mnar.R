@@ -31,15 +31,30 @@ expect_silent(
 
 
 
-theta_0 = c(1,1,1)
+initial_phi = c(1,1/2,-1/4)
+g_function <- function(X) {
+  if(is.data.frame(X)) {
+    return(cbind(1, X$x1, X$x2))
+  } else if(is.matrix(X)) {
+    return(X)
+  } else {
+    stop("X must be a data frame or matrix")
+  }
+}
+
+
+response_model <- function(phi, data) {
+  plogis(phi[1] + phi[2]*data$x1 + phi[3]*data$y)
+}
+
 expect_silent(
-  g <- mnar(response = ~ x1+x2,
-            calibration =  ~ x1 + x2,
-            target = y~x1+x2,
-            data = sample, dweights = sample$d,
-            theta_0 = theta_0,
-            pop_totals = totals[2]/totals[1],
-            maxit = 200,
-            method = "emplik")
+  g1 <- mnar(response = ~ y,
+             calibration =  ~ x1 + x2,
+             data = sample, dweights = sample$d,
+             pop_totals = totals,
+             propensity = response_model,
+             g_function = g_function,
+             phi_0 = initial_phi,
+             method = "emplik")
 )
 
